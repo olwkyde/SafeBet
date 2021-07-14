@@ -26,16 +26,20 @@
 
 //set custom border colors for all the views on this view controller
 -(void) setViewConstraints  {
+    //make the placehlder text white
     [self.usernameTextField setValue:[UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1.0] forKeyPath:@"placeholderLabel.textColor"];
     [self.passwordTextField setValue:[UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1.0] forKeyPath:@"placeholderLabel.textColor"];
     
+    //set a textField border width
     self.usernameTextField.layer.borderWidth = 0.3;
     self.passwordTextField.layer.borderWidth = 0.3;
     
+    //curve the textField border
     self.usernameTextField.layer.cornerRadius = 5;
     self.passwordTextField.layer.cornerRadius = 5;
     self.loginButton.layer.cornerRadius = 5;
     
+    //set the textField border color
     self.usernameTextField.layer.borderColor = [UIColor whiteColor].CGColor;
     self.passwordTextField.layer.borderColor = [UIColor whiteColor].CGColor;
 }

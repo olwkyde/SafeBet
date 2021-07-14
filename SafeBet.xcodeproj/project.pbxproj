@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BB750FE8269E3790005AF740 /* APIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BB750FE7269E3790005AF740 /* APIManager.m */; };
+		BB750FEA269E3B43005AF740 /* TheOddsAPIKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB750FE9269E3B42005AF740 /* TheOddsAPIKeys.plist */; };
+		BB750FEE269E51FF005AF740 /* EventCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB750FED269E51FF005AF740 /* EventCell.m */; };
+		BBBFA0DE269F38ED000FB23E /* Events.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBFA0DD269F38ED000FB23E /* Events.m */; };
 		BBD0A39626993FC500D1E837 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD0A39526993FC500D1E837 /* AppDelegate.m */; };
 		BBD0A39926993FC500D1E837 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD0A39826993FC500D1E837 /* SceneDelegate.m */; };
 		BBD0A39C26993FC500D1E837 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD0A39B26993FC500D1E837 /* ViewController.m */; };
@@ -50,6 +54,13 @@
 		64194D81F69AD1C1CE9425BA /* Pods-SafeBet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SafeBet.debug.xcconfig"; path = "Target Support Files/Pods-SafeBet/Pods-SafeBet.debug.xcconfig"; sourceTree = "<group>"; };
 		6C0CDAA728439AF8EE1987D7 /* Pods-SafeBet-SafeBetUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SafeBet-SafeBetUITests.debug.xcconfig"; path = "Target Support Files/Pods-SafeBet-SafeBetUITests/Pods-SafeBet-SafeBetUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		B4D5EDE1F7F2417D156B6369 /* Pods_SafeBet_SafeBetUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SafeBet_SafeBetUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB750FE6269E3790005AF740 /* APIManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = APIManager.h; sourceTree = "<group>"; };
+		BB750FE7269E3790005AF740 /* APIManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = APIManager.m; sourceTree = "<group>"; };
+		BB750FE9269E3B42005AF740 /* TheOddsAPIKeys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = TheOddsAPIKeys.plist; sourceTree = "<group>"; };
+		BB750FEC269E51FF005AF740 /* EventCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventCell.h; sourceTree = "<group>"; };
+		BB750FED269E51FF005AF740 /* EventCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventCell.m; sourceTree = "<group>"; };
+		BBBFA0DC269F38ED000FB23E /* Events.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Events.h; sourceTree = "<group>"; };
+		BBBFA0DD269F38ED000FB23E /* Events.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Events.m; sourceTree = "<group>"; };
 		BBD0A39126993FC500D1E837 /* SafeBet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SafeBet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBD0A39426993FC500D1E837 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		BBD0A39526993FC500D1E837 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -119,6 +130,33 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		BB750FE5269E3760005AF740 /* API */ = {
+			isa = PBXGroup;
+			children = (
+				BB750FE6269E3790005AF740 /* APIManager.h */,
+				BB750FE7269E3790005AF740 /* APIManager.m */,
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
+		BB750FEB269E51DA005AF740 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				BB750FEC269E51FF005AF740 /* EventCell.h */,
+				BB750FED269E51FF005AF740 /* EventCell.m */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		BB750FEF269E57FA005AF740 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				BBBFA0DC269F38ED000FB23E /* Events.h */,
+				BBBFA0DD269F38ED000FB23E /* Events.m */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		BBD0A38826993FC500D1E837 = {
 			isa = PBXGroup;
 			children = (
@@ -144,10 +182,14 @@
 		BBD0A39326993FC500D1E837 /* SafeBet */ = {
 			isa = PBXGroup;
 			children = (
+				BB750FEF269E57FA005AF740 /* Models */,
+				BB750FEB269E51DA005AF740 /* Views */,
+				BB750FE5269E3760005AF740 /* API */,
 				BBE91A2B269945F300F8A460 /* ViewControllers */,
 				BBD0A39426993FC500D1E837 /* AppDelegate.h */,
 				BBD0A39526993FC500D1E837 /* AppDelegate.m */,
 				BBD0A39726993FC500D1E837 /* SceneDelegate.h */,
+				BB750FE9269E3B42005AF740 /* TheOddsAPIKeys.plist */,
 				BBD0A39826993FC500D1E837 /* SceneDelegate.m */,
 				BBD0A39A26993FC500D1E837 /* ViewController.h */,
 				BBD0A39B26993FC500D1E837 /* ViewController.m */,
@@ -314,6 +356,7 @@
 				BBD0A3A426993FC700D1E837 /* LaunchScreen.storyboard in Resources */,
 				BBD0A3A126993FC700D1E837 /* Assets.xcassets in Resources */,
 				BBD0A39F26993FC500D1E837 /* Main.storyboard in Resources */,
+				BB750FEA269E3B43005AF740 /* TheOddsAPIKeys.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -445,8 +488,11 @@
 				BBD0A39626993FC500D1E837 /* AppDelegate.m in Sources */,
 				BBE91A3826997CFF00F8A460 /* HomeFeedViewController.m in Sources */,
 				BBE91A35269953F100F8A460 /* SignUpViewController.m in Sources */,
+				BBBFA0DE269F38ED000FB23E /* Events.m in Sources */,
+				BB750FE8269E3790005AF740 /* APIManager.m in Sources */,
 				BBD0A3A726993FC700D1E837 /* main.m in Sources */,
 				BBD0A39926993FC500D1E837 /* SceneDelegate.m in Sources */,
+				BB750FEE269E51FF005AF740 /* EventCell.m in Sources */,
 				BBE91A2E2699460A00F8A460 /* LoginViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
