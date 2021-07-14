@@ -48,6 +48,8 @@
         NSDate *date = [formatter dateFromString:gameDate];
         NSLog(@"%@", date);
         
+        
+        
         int gameHour = self.gameDate.hour;
         int gameMinute = self.gameDate.minute;
         
