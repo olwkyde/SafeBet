@@ -16,8 +16,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSDate *gameDate; // the date of the game
 @property (nonatomic, strong) NSString *date; //the day the match/competition/fight is
 @property (nonatomic, strong) NSString *time; //the time of the day the match/competition/fight is
-@property (nonatomic) int *team1Odds; //the Head to Head odds for the first team
-@property (nonatomic) int *team2Odds; //the Head to Head odds for the second team
+@property (nonatomic, assign) int *team1Odds; //the Head to Head odds for the first team
+@property (nonatomic, assign) int *team2Odds; //the Head to Head odds for the second team
+@property (nonatomic, strong) NSString *sport;
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary;
 + (NSMutableArray *)eventsWithArray:(NSArray *)dictionaries;
 @end
