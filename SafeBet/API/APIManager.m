@@ -48,6 +48,7 @@ static NSString * const baseURLString = @"https://the-odds-api.com/liveapi/guide
                NSArray *dataDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
                NSMutableArray *events = [Events eventsWithArray:dataDictionary];
                completion(events, nil);
+
            }
        }];
     [task resume];

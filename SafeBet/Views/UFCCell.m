@@ -27,7 +27,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView registerClass:EventCell.class forCellReuseIdentifier:@"EventCell"];
-    self.tableView.translatesAutoresizingMaskIntoConstraints = false;
+//    self.tableView.translatesAutoresizingMaskIntoConstraints = false;
     self.tableView.backgroundColor = [UIColor blackColor];
     [self addSubview:self.tableView];
     
