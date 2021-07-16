@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BB567AC626A0ECE000D81E8F /* UFCCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB567AC426A0ECE000D81E8F /* UFCCell.m */; };
+		BB567AC726A0ECE000D81E8F /* UFCCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB567AC526A0ECE000D81E8F /* UFCCell.xib */; };
+		BB567ACA26A11C1C00D81E8F /* UFCEventCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB567AC926A11C1C00D81E8F /* UFCEventCell.m */; };
 		BB750FE8269E3790005AF740 /* APIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BB750FE7269E3790005AF740 /* APIManager.m */; };
 		BB750FEA269E3B43005AF740 /* TheOddsAPIKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB750FE9269E3B42005AF740 /* TheOddsAPIKeys.plist */; };
 		BB750FEE269E51FF005AF740 /* EventCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB750FED269E51FF005AF740 /* EventCell.m */; };
@@ -54,6 +57,11 @@
 		64194D81F69AD1C1CE9425BA /* Pods-SafeBet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SafeBet.debug.xcconfig"; path = "Target Support Files/Pods-SafeBet/Pods-SafeBet.debug.xcconfig"; sourceTree = "<group>"; };
 		6C0CDAA728439AF8EE1987D7 /* Pods-SafeBet-SafeBetUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SafeBet-SafeBetUITests.debug.xcconfig"; path = "Target Support Files/Pods-SafeBet-SafeBetUITests/Pods-SafeBet-SafeBetUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		B4D5EDE1F7F2417D156B6369 /* Pods_SafeBet_SafeBetUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SafeBet_SafeBetUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB567AC326A0ECE000D81E8F /* UFCCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UFCCell.h; sourceTree = "<group>"; };
+		BB567AC426A0ECE000D81E8F /* UFCCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UFCCell.m; sourceTree = "<group>"; };
+		BB567AC526A0ECE000D81E8F /* UFCCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UFCCell.xib; sourceTree = "<group>"; };
+		BB567AC826A11C1C00D81E8F /* UFCEventCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UFCEventCell.h; sourceTree = "<group>"; };
+		BB567AC926A11C1C00D81E8F /* UFCEventCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UFCEventCell.m; sourceTree = "<group>"; };
 		BB750FE6269E3790005AF740 /* APIManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = APIManager.h; sourceTree = "<group>"; };
 		BB750FE7269E3790005AF740 /* APIManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = APIManager.m; sourceTree = "<group>"; };
 		BB750FE9269E3B42005AF740 /* TheOddsAPIKeys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = TheOddsAPIKeys.plist; sourceTree = "<group>"; };
@@ -144,6 +152,11 @@
 			children = (
 				BB750FEC269E51FF005AF740 /* EventCell.h */,
 				BB750FED269E51FF005AF740 /* EventCell.m */,
+				BB567AC326A0ECE000D81E8F /* UFCCell.h */,
+				BB567AC426A0ECE000D81E8F /* UFCCell.m */,
+				BB567AC526A0ECE000D81E8F /* UFCCell.xib */,
+				BB567AC826A11C1C00D81E8F /* UFCEventCell.h */,
+				BB567AC926A11C1C00D81E8F /* UFCEventCell.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -353,6 +366,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB567AC726A0ECE000D81E8F /* UFCCell.xib in Resources */,
 				BBD0A3A426993FC700D1E837 /* LaunchScreen.storyboard in Resources */,
 				BBD0A3A126993FC700D1E837 /* Assets.xcassets in Resources */,
 				BBD0A39F26993FC500D1E837 /* Main.storyboard in Resources */,
@@ -484,10 +498,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB567AC626A0ECE000D81E8F /* UFCCell.m in Sources */,
 				BBD0A39C26993FC500D1E837 /* ViewController.m in Sources */,
 				BBD0A39626993FC500D1E837 /* AppDelegate.m in Sources */,
 				BBE91A3826997CFF00F8A460 /* HomeFeedViewController.m in Sources */,
 				BBE91A35269953F100F8A460 /* SignUpViewController.m in Sources */,
+				BB567ACA26A11C1C00D81E8F /* UFCEventCell.m in Sources */,
 				BBBFA0DE269F38ED000FB23E /* Events.m in Sources */,
 				BB750FE8269E3790005AF740 /* APIManager.m in Sources */,
 				BBD0A3A726993FC700D1E837 /* main.m in Sources */,
