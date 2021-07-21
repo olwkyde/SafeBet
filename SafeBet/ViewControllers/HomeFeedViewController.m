@@ -116,29 +116,20 @@
     cell.team1Label.text = event.team1;
     cell.team2Label.text = event.team2;
     
-    //add the plus sign if the odds are positive
-    if (event.team1Odds <= 100) {
-        cell.team1OddsLabel.text = [NSString stringWithFormat:@"%d", event.team1Odds];
-
+    NSString *odds1 = [NSString stringWithFormat:@"%d", event.team1Odds];
+    NSString *odds2 = [NSString stringWithFormat:@"%d", event.team2Odds];
+    
+    //adding plus sign to positive odds
+    if (([odds1 characterAtIndex:0] == 45)) {
+        cell.team1OddsLabel.text = odds1;
     }   else{
-        cell.team1OddsLabel.text = [@"+" stringByAppendingString:[NSString stringWithFormat:@"%d", event.team1Odds]];
+        cell.team1OddsLabel.text = [@"+" stringByAppendingString:odds1];
     }
-    if (event.team2Odds <= 100) {
-        cell.team2OddsLabel.text = [NSString stringWithFormat:@"%d", event.team2Odds];
-
+    if (([odds2 characterAtIndex:0] == 45)) {
+        cell.team2OddsLabel.text = odds2;
     }   else{
-        cell.team2OddsLabel.text = [@"+" stringByAppendingString:[NSString stringWithFormat:@"%d", event.team2Odds]];
+        cell.team2OddsLabel.text = [@"+" stringByAppendingString:odds2];
     }
-    
-    //take out the + sign in front of the odds if it has been erroneously placed in front of a - odd
-    if (([cell.team1OddsLabel.text characterAtIndex:0] == '+') && ([cell.team1OddsLabel.text characterAtIndex:1] == '-'))   {
-        cell.team1OddsLabel.text = [cell.team1OddsLabel.text substringFromIndex:1];
-    }
-    
-    if (([cell.team2OddsLabel.text characterAtIndex:0] == '+') && ([cell.team2OddsLabel.text characterAtIndex:1] == '-'))   {
-        cell.team2OddsLabel.text = [cell.team2OddsLabel.text substringFromIndex:1];
-    }
-    
     return cell;
 }
 
