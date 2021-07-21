@@ -105,8 +105,6 @@
     if ([self.betTextField.text length] != 0 && ([self team1Selected] || [self team2Selected])) {
         [self updatePayoutInformation];
     }
-    
-    
 }
 
 -(void) updatePayoutInformation {

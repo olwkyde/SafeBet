@@ -44,9 +44,6 @@
     [self fetchMLBEvents];
     [self fetchBets];
     
-    
-    
-    
 }
 
 - (void) fetchBets  {
