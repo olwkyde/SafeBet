@@ -21,6 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *sport;
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary;
 + (NSMutableArray *)eventsWithArray:(NSArray *)dictionaries;
++ (NSMutableArray *)mlbEventsWithArray:(NSArray *)dictionaries;
 @end
 
 NS_ASSUME_NONNULL_END

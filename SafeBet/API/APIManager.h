@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_END
 
 + (instancetype)shared;
 - (void) fetchEventsWithCompletion: (void(^)(NSArray *events, NSError*)) completion;
+- (void) fetchMLBEventsWithCompletion: (void(^)(NSArray *events, NSError*)) completion;
 
 
 @end

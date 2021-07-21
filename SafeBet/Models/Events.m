@@ -8,7 +8,9 @@
 #import "Events.h"
 #import "NSDate+DateTools.h"
 
+
 @implementation Events
+
 
 -(instancetype)initWithDictionary:(NSDictionary *)dictionary   {
     self = [super init];
@@ -28,13 +30,6 @@
         
         NSString *name1 = odd1[@"name"];
         
-//        if ([name1 isEqualToString:self.team1]) {
-//            self.team1Odds = (double) odd1[@"price"];
-//            self.team2Odds = (double) odd2[@"price"];
-//        }   else {
-//            self.team2Odds = (double) odd1[@"price"];
-//            self.team1Odds = (double) odd2[@"price"];
-//        }
         
         if ([name1 isEqualToString:self.team1]) {
             self.team1Odds = ([odd1[@"price"] intValue] / 10) * 10;
@@ -76,6 +71,48 @@
 }
 
 + (NSMutableArray *)eventsWithArray:(NSArray *)dictionaries{
+        NSMutableArray *upcomingEvent = [NSMutableArray array];
+        NSMutableArray *eventNextWeek = [NSMutableArray array];
+        NSMutableArray *mainCards = [NSMutableArray array];
+    
+        NSDate *now = [NSDate date];
+    
+    
+    
+        for (NSDictionary *dictionary in dictionaries) {
+            
+            //finding the amount of time between now and the commence time to filter events that are too far out in the future
+
+            NSString *eventDateString = dictionary[@"commence_time"];
+            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+            [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZZZ"];
+            NSDate *eventDate = [formatter dateFromString: eventDateString];
+            
+            NSTimeInterval secondsBetween = [eventDate timeIntervalSinceDate:now];
+            int numberOfDays = secondsBetween / 86400;
+            
+            if (numberOfDays <= 13) {
+                Events *event = [[Events alloc] initWithDictionary:dictionary];
+                if (numberOfDays <= 6)  {
+                    [upcomingEvent addObject:event];
+                }   else {
+                    Events *event = [[Events alloc] initWithDictionary:dictionary];
+                    [eventNextWeek addObject:event];
+                }
+            }
+        }
+        
+    for (int i = (upcomingEvent.count >= 5) ? 5 : upcomingEvent.count; i >= 0; i--)    {
+        [mainCards addObject:upcomingEvent[upcomingEvent.count - i - 1]];
+    }
+    for (int i = (eventNextWeek.count >= 5) ? 5 : eventNextWeek.count; i >= 0; i--)    {
+        [mainCards addObject:eventNextWeek[eventNextWeek.count - i - 1]];
+    }
+        return mainCards;
+}
+
+
++ (NSMutableArray *)mlbEventsWithArray:(NSArray *)dictionaries{
         NSMutableArray *events = [NSMutableArray array];
     
         NSDate *now = [NSDate date];
@@ -91,7 +128,8 @@
             NSTimeInterval secondsBetween = [eventDate timeIntervalSinceDate:now];
             int numberOfDays = secondsBetween / 86400;
             
-            if (numberOfDays <= 13) {
+            
+            if (numberOfDays <= 2) {
                 Events *event = [[Events alloc] initWithDictionary:dictionary];
                 [events addObject:event];
             }
