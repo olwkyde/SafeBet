@@ -26,13 +26,51 @@
     self.betTextField.layer.cornerRadius = 5;
     self.betTextField.layer.borderColor = [UIColor whiteColor].CGColor;
     
-    self.team1ImageView.layer.cornerRadius = (self.team1ImageView.frame.size.width / 2);
-    self.team1ImageView.layer.borderColor = [UIColor whiteColor].CGColor;
-    self.team2ImageView.layer.cornerRadius = (self.team2ImageView.frame.size.width / 2);
-    self.team1ImageView.layer.borderColor = [UIColor whiteColor].CGColor;
+    self.team1Button.layer.cornerRadius = (self.team1Button.frame.size.width / 2);
+    self.team1Button.layer.borderColor = [UIColor whiteColor].CGColor;
+    self.team2Button.layer.cornerRadius = (self.team2Button.frame.size.width / 2);
+    self.team2Button.layer.borderColor = [UIColor whiteColor].CGColor;
+    
     
     [self configure];
 }
+- (IBAction)didTapTeam1Button:(id)sender {
+    //self.teamBetOnImageView.image = self.team1Button.imageView.image;
+    
+    //add a border width to the button to show it has been selected
+    self.team1Button.layer.borderWidth = 0.3;
+    self.team2Button.layer.borderWidth = 0;
+        
+    //update payout info if the text field is not empty
+    if ([self.betTextField.text length] != 0)   {
+        [self updatePayoutInformation];
+    }
+}
+
+
+//check if team 1 was selected
+-(BOOL)team1Selected    {
+    return (self.team1Button.layer.borderWidth == 0);
+}
+
+
+- (IBAction)didTapTeam2Button:(id)sender {
+    //self.teamBetOnImageView.image = self.team2Button.imageView.image;
+    
+    //add a border width to be button to show it has been selected
+    self.team2Button.layer.borderWidth = 0.3;
+    self.team1Button.layer.borderWidth = 0;
+    
+    //update payout info if the text field is not empty
+    if ([self.betTextField.text length] != 0)   {
+        [self updatePayoutInformation];
+    }
+}
+
+-(BOOL)team2Selected    {
+    return (self.team2Button.layer.borderWidth == 0);
+}
+
 - (IBAction)submitButtonPressed:(id)sender {
 }
 
@@ -57,50 +95,47 @@
         self.odds2Label.text = [@"+" stringByAppendingString:odds2];
     }
 }
-- (IBAction)didTapTeam1:(id)sender {
-    //check if the bet text field is empty
-    self.teamBetOnImageView.image = self.team1ImageView.image;
-    self.team1ImageView.layer.borderWidth = 0.3;
-    self.team2ImageView.layer.borderWidth = 0;
-    
-    
-}
 
-- (IBAction)didTapTeam2:(id)sender {
-    self.teamBetOnImageView.image = self.team2ImageView.image;
-    self.team2ImageView.layer.borderWidth = 0.3;
-    self.team1ImageView.layer.borderWidth = 0;
-}
 
 - (IBAction)viewTapGesture:(id)sender {
-    //checking if the bet text field is empty
+    //dismiss the keyboard
     [self.view endEditing:true];
-    [self updatePayoutInformation];
+    
+    //check if the bet text field is empty and if a team has been selected and update payout information if so
+    if ([self.betTextField.text length] != 0 && ([self team1Selected] || [self team2Selected])) {
+        [self updatePayoutInformation];
+    }
+    
+    
 }
 
 -(void) updatePayoutInformation {
-    if (self.betAmountLabel.text != nil)    {
-        if ([self.betTextField.text length] != 0 && self.teamBetOnImageView.image != nil) {
-            if (self.team1ImageView.layer.borderWidth != 0) {
-                self.betAmountInt = [self.betTextField.text intValue];
-                if ([self.odds1Label.text characterAtIndex:0] == 45)    {
-                    self.teamCorrectInt = (100. / ([[self.odds1Label.text substringFromIndex:1] doubleValue])) * (self.betAmountInt);
-                    self.teamCorrectAmountLabel.text = [NSString stringWithFormat:@"%f", self.teamCorrectInt];
-                }   else {
-                    self.teamCorrectInt = ([[self.odds1Label.text substringFromIndex:1] doubleValue]) * (self.betAmountInt);
-                    self.teamCorrectAmountLabel.text = [NSString stringWithFormat:@"%f", self.teamCorrectInt];
-                }
-            }   else if (self.team2ImageView.layer.borderWidth != 0)    {
-                    self.betAmountInt = [self.betTextField.text intValue];
-                    if ([self.odds2Label.text characterAtIndex:0] == 45)    {
-                        self.teamCorrectInt = (100. / ([[self.odds2Label.text substringFromIndex:1] doubleValue])) * (self.betAmountInt);
-                        self.teamCorrectAmountLabel.text = [NSString stringWithFormat:@"%f", self.teamCorrectInt];
-                    }   else {
-                        self.teamCorrectInt = ([[self.odds2Label.text substringFromIndex:1] doubleValue]) * (self.betAmountInt);
-                        self.teamCorrectAmountLabel.text = [NSString stringWithFormat:@"%f", self.teamCorrectInt];
-                }
+    self.betAmountInt = [self.betTextField.text doubleValue];
+    self.betAmountLabel.text = [NSString stringWithFormat:@"%.2f", self.betAmountInt];
+    if ([self team1Selected])   {
+        if ([self.odds1Label.text characterAtIndex:0] == 45)    {
+            self.teamCorrectInt = (100. / ([[self.odds1Label.text substringFromIndex:1] doubleValue])) * (self.betAmountInt);
+            self.teamCorrectAmountLabel.text = [NSString stringWithFormat:@"%.2f", self.teamCorrectInt];
+            self.payoutInt = self.betAmountInt + self.teamCorrectInt;
+            self.payoutAmountLabel.text = [NSString stringWithFormat:@"%.2f", self.payoutInt];
+        }   else {
+                self.teamCorrectInt = ([[self.odds1Label.text substringFromIndex:1] doubleValue] / 100.) * (self.betAmountInt);
+                self.teamCorrectAmountLabel.text = [NSString stringWithFormat:@"%.2f", self.teamCorrectInt];
+                self.payoutInt = self.betAmountInt + self.teamCorrectInt;
+                self.payoutAmountLabel.text = [NSString stringWithFormat:@"%.2f", self.payoutInt];
             }
-        }
+    }   else    {
+            if ([self.odds1Label.text characterAtIndex:0] == 45)    {
+                self.teamCorrectInt = (100. / ([[self.odds2Label.text substringFromIndex:1] doubleValue])) * (self.betAmountInt);
+                self.teamCorrectAmountLabel.text = [NSString stringWithFormat:@"%.2f", self.teamCorrectInt];
+                self.payoutInt = self.betAmountInt + self.teamCorrectInt;
+                self.payoutAmountLabel.text = [NSString stringWithFormat:@"%.2f", self.payoutInt];
+            }   else {
+                    self.teamCorrectInt = ([[self.odds2Label.text substringFromIndex:1] doubleValue] / 100.) * (self.betAmountInt);
+                    self.teamCorrectAmountLabel.text = [NSString stringWithFormat:@"%.2f", self.teamCorrectInt];
+                    self.payoutInt = self.betAmountInt + self.teamCorrectInt;
+                    self.payoutAmountLabel.text = [NSString stringWithFormat:@"%.2f", self.payoutInt];
+            }
     }
 }
 

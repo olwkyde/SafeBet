@@ -13,6 +13,9 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MakePickViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UIImageView *team1ImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *team2ImageView;
+@property (weak, nonatomic) IBOutlet UIButton *team1Button;
+@property (weak, nonatomic) IBOutlet UIButton *team2Button;
+
 @property (weak, nonatomic) IBOutlet UILabel *team1Label;
 @property (weak, nonatomic) IBOutlet UILabel *team2Label;
 @property (weak, nonatomic) IBOutlet UILabel *odds1Label;
@@ -23,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UILabel *teamCorrectAmountLabel;
 @property (weak, nonatomic) IBOutlet UILabel *payoutAmountLabel;
 @property (nonatomic, strong) UIImageView *teamBetOnImageView;
-@property (nonatomic, assign) double *payoutInt;
+@property (nonatomic, assign) double payoutInt;
 @property (strong, nonatomic) Events *event;
 
 @end
