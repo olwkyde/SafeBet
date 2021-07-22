@@ -7,11 +7,13 @@
 
 #import "MakePickViewController.h"
 #import <QuartzCore/QuartzCore.h>
+#import <Lottie/Lottie-Swift.h>
 
 @interface MakePickViewController ()
 
 @property (nonatomic, assign) double betAmountInt;
 @property (nonatomic, assign) double teamCorrectInt;
+@property (weak, nonatomic) IBOutlet UIView *animationView;
 
 @end
 
@@ -79,6 +81,7 @@
 }
 
 - (IBAction)submitButtonPressed:(id)sender {
+
 }
 
 

@@ -43,7 +43,7 @@
     self.leagueNames = [NSMutableArray arrayWithObjects:@"MLB", @"UFC", nil];
     [self fetchMLBEvents];
     [self fetchBets];
-    
+
 }
 
 - (void) fetchBets  {
