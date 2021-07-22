@@ -410,6 +410,13 @@
                                     <action selector="didTapTeam2Button:" destination="pJT-8t-JDE" eventType="touchUpInside" id="gwi-wJ-zaK"/>
                                 </connections>
                             </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TRG-xN-qsz">
+                                <rect key="frame" x="145" y="233.66666666666663" width="100" height="100"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="100" id="fYK-aW-TAW"/>
+                                    <constraint firstAttribute="width" constant="100" id="mnQ-er-7TT"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="z1P-Ph-7iW"/>
                         <color key="backgroundColor" systemColor="labelColor"/>
@@ -426,9 +433,11 @@
                             <constraint firstItem="rl9-Dd-Sbr" firstAttribute="centerX" secondItem="GNh-Xp-ZSA" secondAttribute="centerX" id="BUz-IN-i8q"/>
                             <constraint firstItem="E2L-9L-4h5" firstAttribute="centerY" secondItem="J9h-Ef-Yua" secondAttribute="centerY" id="Bwb-uT-78Z"/>
                             <constraint firstItem="bly-m0-Yt6" firstAttribute="bottom" secondItem="qys-B7-IfG" secondAttribute="bottom" id="E3s-Mf-Web"/>
+                            <constraint firstItem="TRG-xN-qsz" firstAttribute="centerY" secondItem="fGR-f4-ghM" secondAttribute="centerY" id="FLr-xF-I5Y"/>
                             <constraint firstItem="qys-B7-IfG" firstAttribute="top" secondItem="HpN-Qf-qox" secondAttribute="bottom" constant="5" id="FRQ-va-e3w"/>
                             <constraint firstItem="E2L-9L-4h5" firstAttribute="centerX" secondItem="Nx5-nj-GwQ" secondAttribute="centerX" constant="50" id="Fqz-36-5vS"/>
                             <constraint firstItem="lrx-WH-cdR" firstAttribute="top" secondItem="Tjk-uB-XKK" secondAttribute="bottom" constant="10" id="GVC-5Z-EIC"/>
+                            <constraint firstItem="TRG-xN-qsz" firstAttribute="centerX" secondItem="fGR-f4-ghM" secondAttribute="centerX" id="HD0-fb-tPl"/>
                             <constraint firstItem="lKP-Ya-JXv" firstAttribute="trailing" secondItem="rl9-Dd-Sbr" secondAttribute="trailing" id="LNx-HO-hZC"/>
                             <constraint firstItem="vrg-AK-4tr" firstAttribute="centerY" secondItem="lrx-WH-cdR" secondAttribute="centerY" id="LQL-N9-5xm"/>
                             <constraint firstItem="J9h-Ef-Yua" firstAttribute="top" secondItem="fGR-f4-ghM" secondAttribute="bottom" constant="50" id="NOq-8G-UeZ"/>
@@ -468,6 +477,7 @@
                         <barButtonItem key="backBarButtonItem" title="&lt; Upcoming Events" id="Qf6-q0-AbP"/>
                     </navigationItem>
                     <connections>
+                        <outlet property="animationView" destination="TRG-xN-qsz" id="SdB-aP-sJ8"/>
                         <outlet property="bankAmountLabel" destination="x16-qr-BfU" id="qug-8Z-wmf"/>
                         <outlet property="betAmountLabel" destination="lKP-Ya-JXv" id="4N2-IQ-YEI"/>
                         <outlet property="betTextField" destination="E2L-9L-4h5" id="6NY-u5-T5F"/>
