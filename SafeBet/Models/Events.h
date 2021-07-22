@@ -6,6 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -19,9 +20,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) int *team1Odds; //the Head to Head odds for the first team
 @property (nonatomic, assign) int *team2Odds; //the Head to Head odds for the second team
 @property (nonatomic, strong) NSString *sport;
+@property (nonatomic, strong) UIImageView *team1ImageView; // the image for the first team/fighter/competitor
+@property (nonatomic, strong) UIImageView *team2ImageView; // the image for the second team/fighter/competitor
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary;
 + (NSMutableArray *)eventsWithArray:(NSArray *)dictionaries;
 + (NSMutableArray *)mlbEventsWithArray:(NSArray *)dictionaries;
++ (NSURL *)fetchLogo:(NSArray *) dictionary;
 @end
 
 NS_ASSUME_NONNULL_END

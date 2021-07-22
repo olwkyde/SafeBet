@@ -7,6 +7,8 @@
 
 #import "Events.h"
 #import "NSDate+DateTools.h"
+#import "UIImageView+AFNetworking.h"
+#import "APIManager.h"
 
 
 @implementation Events
@@ -50,8 +52,6 @@
         int gameHour = self.gameDate.hour;
         int gameMinute = self.gameDate.minute;
         
-        
-        
         NSString *am = @" AM";
         NSString *pm = @" PM";
         if (gameHour > 12) {
@@ -66,8 +66,38 @@
         int gameYear = (self.gameDate.year % 100);
         
         self.date = [NSString stringWithFormat:@"%d%@%d%@%d", gameMonth, @"/", gameDay, @"/", gameYear];
+        
+        if ([self.sport isEqualToString:@"MLB"])   {
+            [self fetchLogos];
+        }
     }
     return self;
+}
+
+-(void) fetchLogos  {
+    APIManager *api = [APIManager shared];
+    
+    [api fetchMLBPictures:self.team1 withCompletion:^(NSURL *link, NSError *error)  {
+        if(error)   {
+            NSLog(@"Error fetching bets: %@", [error localizedDescription]);
+        }   else if (link == nil)   {
+            NSLog(@"Tuf");
+        }
+        else{
+            [self.team1ImageView setImageWithURL:link];
+        }
+    }];
+    
+    [api fetchMLBPictures:self.team2 withCompletion:^(NSURL *link, NSError *error)  {
+        if(error)   {
+            NSLog(@"Error fetching bets: %@", [error localizedDescription]);
+        }   else if (link == nil)   {
+            NSLog(@"Tuf");
+        }
+        else{
+            [self.team2ImageView setImageWithURL:link];
+        }
+    }];
 }
 
 + (NSMutableArray *)eventsWithArray:(NSArray *)dictionaries{
@@ -77,12 +107,8 @@
     
         NSDate *now = [NSDate date];
     
-    
-    
         for (NSDictionary *dictionary in dictionaries) {
-            
             //finding the amount of time between now and the commence time to filter events that are too far out in the future
-
             NSString *eventDateString = dictionary[@"commence_time"];
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
             [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZZZ"];
@@ -128,7 +154,6 @@
             NSTimeInterval secondsBetween = [eventDate timeIntervalSinceDate:now];
             int numberOfDays = secondsBetween / 86400;
             
-            
             if (numberOfDays <= 2) {
                 Events *event = [[Events alloc] initWithDictionary:dictionary];
                 [events addObject:event];
@@ -136,5 +161,6 @@
         }
         return events;
 }
+
 
 @end
