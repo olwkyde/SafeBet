@@ -21,27 +21,34 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    [self setUpViews];
+    [self configure];
+}
+
+- (void) setUpViews {
     //set up the Bet Text Field
     self.betTextField.layer.borderWidth = 0.3;
     self.betTextField.layer.cornerRadius = 5;
     self.betTextField.layer.borderColor = [UIColor whiteColor].CGColor;
     
+    //set up the Buttons for each team Image
     self.team1Button.layer.cornerRadius = (self.team1Button.frame.size.width / 2);
     self.team1Button.layer.borderColor = [UIColor whiteColor].CGColor;
     self.team2Button.layer.cornerRadius = (self.team2Button.frame.size.width / 2);
     self.team2Button.layer.borderColor = [UIColor whiteColor].CGColor;
     
-    
-    [self configure];
+    //rounded corners for the submit button
+    self.submitButton.layer.cornerRadius = 5;
 }
+
 - (IBAction)didTapTeam1Button:(id)sender {
     //self.teamBetOnImageView.image = self.team1Button.imageView.image;
     
-    //add a border width to the button to show it has been selected
-    self.team1Button.layer.borderWidth = 0.3;
-    self.team2Button.layer.borderWidth = 0;
+    //change the color of the team
+    self.team1Label.textColor = [UIColor greenColor];
+    self.team2Label.textColor = [UIColor whiteColor];
         
-    //update payout info if the text field is not empty
+    //add a green color to indicate the team has been selected
     if ([self.betTextField.text length] != 0)   {
         [self updatePayoutInformation];
     }
@@ -50,16 +57,16 @@
 
 //check if team 1 was selected
 -(BOOL)team1Selected    {
-    return (self.team1Button.layer.borderWidth == 0);
+    return (self.team1Label.textColor == [UIColor greenColor]);
 }
 
 
 - (IBAction)didTapTeam2Button:(id)sender {
     //self.teamBetOnImageView.image = self.team2Button.imageView.image;
     
-    //add a border width to be button to show it has been selected
-    self.team2Button.layer.borderWidth = 0.3;
-    self.team1Button.layer.borderWidth = 0;
+    //add a green color to indicate the team has been selected
+    self.team2Label.textColor = [UIColor greenColor];
+    self.team1Label.textColor = [UIColor whiteColor];
     
     //update payout info if the text field is not empty
     if ([self.betTextField.text length] != 0)   {
@@ -68,7 +75,7 @@
 }
 
 -(BOOL)team2Selected    {
-    return (self.team2Button.layer.borderWidth == 0);
+    return (self.team2Label.textColor == [UIColor greenColor]);
 }
 
 - (IBAction)submitButtonPressed:(id)sender {
@@ -107,9 +114,12 @@
     }
 }
 
+//updates the bet, team correct, and payout information based on the bet amount placed and team it is bet on
 -(void) updatePayoutInformation {
+    
     self.betAmountInt = [self.betTextField.text doubleValue];
     self.betAmountLabel.text = [NSString stringWithFormat:@"%.2f", self.betAmountInt];
+    
     if ([self team1Selected])   {
         if ([self.odds1Label.text characterAtIndex:0] == 45)    {
             self.teamCorrectInt = (100. / ([[self.odds1Label.text substringFromIndex:1] doubleValue])) * (self.betAmountInt);
@@ -123,7 +133,7 @@
                 self.payoutAmountLabel.text = [NSString stringWithFormat:@"%.2f", self.payoutInt];
             }
     }   else    {
-            if ([self.odds1Label.text characterAtIndex:0] == 45)    {
+            if ([self.odds2Label.text characterAtIndex:0] == 45)    {
                 self.teamCorrectInt = (100. / ([[self.odds2Label.text substringFromIndex:1] doubleValue])) * (self.betAmountInt);
                 self.teamCorrectAmountLabel.text = [NSString stringWithFormat:@"%.2f", self.teamCorrectInt];
                 self.payoutInt = self.betAmountInt + self.teamCorrectInt;

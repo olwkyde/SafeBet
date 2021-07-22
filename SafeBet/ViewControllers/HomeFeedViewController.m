@@ -107,6 +107,11 @@
     EventCell *cell = [tableView dequeueReusableCellWithIdentifier:@"EventCell"];
     Events *event = self.data[indexPath.section][indexPath.row];
     
+    cell.team1ImageView.layer.borderWidth = (cell.team1ImageView.frame.size.width / 2);
+    cell.team2ImageView.layer.borderWidth = (cell.team2ImageView.frame.size.width / 2);
+    cell.team1ImageView.image = event.team1ImageView.image;
+    cell.team2ImageView.image = event.team2ImageView.image;
+    
     cell.event = event;
     cell.dayLabel.text = event.date;
     cell.timeLabel.text = event.time;

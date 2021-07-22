@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UIImageView *team2ImageView;
 @property (weak, nonatomic) IBOutlet UIButton *team1Button;
 @property (weak, nonatomic) IBOutlet UIButton *team2Button;
+@property (weak, nonatomic) IBOutlet UIButton *submitButton;
 
 @property (weak, nonatomic) IBOutlet UILabel *team1Label;
 @property (weak, nonatomic) IBOutlet UILabel *team2Label;
