@@ -68,37 +68,44 @@
         self.date = [NSString stringWithFormat:@"%d%@%d%@%d", gameMonth, @"/", gameDay, @"/", gameYear];
         
         if ([self.sport isEqualToString:@"MLB"])   {
-            [self fetchLogos];
+            self.team1Image = [UIImage imageNamed:self.team1];
+            self.team2Image = [UIImage imageNamed:self.team2];
         }
     }
     return self;
 }
 
--(void) fetchLogos  {
-    APIManager *api = [APIManager shared];
-    
-    [api fetchMLBPictures:self.team1 withCompletion:^(NSURL *link, NSError *error)  {
-        if(error)   {
-            NSLog(@"Error fetching bets: %@", [error localizedDescription]);
-        }   else if (link == nil)   {
-            NSLog(@"Tuf");
-        }
-        else{
-            [self.team1ImageView setImageWithURL:link];
-        }
-    }];
-    
-    [api fetchMLBPictures:self.team2 withCompletion:^(NSURL *link, NSError *error)  {
-        if(error)   {
-            NSLog(@"Error fetching bets: %@", [error localizedDescription]);
-        }   else if (link == nil)   {
-            NSLog(@"Tuf");
-        }
-        else{
-            [self.team2ImageView setImageWithURL:link];
-        }
-    }];
-}
+//-(void) fetchLogos  {
+//    APIManager *api = [APIManager shared];
+//    
+//    [api fetchMLBPictures:self.team1 withCompletion:^(NSURL *link, NSError *error)  {
+//        if(error)   {
+//            NSLog(@"Error fetching bets: %@", [error localizedDescription]);
+//        }   else if (link == nil)   {
+//            NSLog(@"Tuf");
+//        }
+//        else{
+//            NSData *data = [[NSData alloc] initWithContentsOfURL: link];
+//            UIImage *image = [UIImage imageWithData:data];
+//            UIImage *newImage = [self resizeImage:image withSize:CGSizeMake(25, 25)];
+//            self.team1Image = newImage;
+//        }
+//    }];
+//    
+//    [api fetchMLBPictures:self.team2 withCompletion:^(NSURL *link, NSError *error)  {
+//        if(error)   {
+//            NSLog(@"Error fetching bets: %@", [error localizedDescription]);
+//        }   else if (link == nil)   {
+//            NSLog(@"Tuf");
+//        }
+//        else{
+//            NSData *data = [[NSData alloc] initWithContentsOfURL: link];
+//            UIImage *image = [UIImage imageWithData:data];
+//            UIImage *newImage = [self resizeImage:image withSize:CGSizeMake(25, 25)];
+//            self.team2Image = newImage;
+//        }
+//    }];
+//}
 
 + (NSMutableArray *)eventsWithArray:(NSArray *)dictionaries{
         NSMutableArray *upcomingEvent = [NSMutableArray array];
@@ -160,6 +167,21 @@
             }
         }
         return events;
+}
+
+//returns image resized
+-(UIImage *)resizeImage:(UIImage *)image withSize:(CGSize)size  {
+    UIImageView *resizeImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
+    
+    resizeImageView.contentMode = UIViewContentModeScaleAspectFill;
+    resizeImageView.image = image;
+    
+    UIGraphicsBeginImageContext(size);
+    [resizeImageView.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return newImage;
 }
 
 

@@ -77,29 +77,29 @@ static NSString * const baseURLString = @"https://the-odds-api.com/liveapi/guide
 }
 
 
-- (void)fetchMLBPictures: (NSString * _Nullable)teamName withCompletion:(void (^)(NSURL *link, NSError *error))completion {
-    //get the bets from endpoint
-    NSString *endpoint = @"https://www.thesportsdb.com/api/v1/json/1/searchteams.php?t=";
-    NSString *team = [teamName stringByReplacingOccurrencesOfString:@" " withString:@"+"];
-    
-    NSString *urlString = [endpoint stringByAppendingString:team];
-    NSURL *url = [NSURL URLWithString:urlString];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:10.0];
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:nil delegateQueue:[NSOperationQueue mainQueue]];
-    NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-           if (error != nil) {
-               completion(nil, error);
-           }
-           else {
-               NSDictionary *dataDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-               NSArray *teams = dataDictionary[@"teams"];
-               NSDictionary *team = teams[0];
-               NSString *logoLink = team[@"strTeamBadge"];
-               NSURL *link = [NSURL URLWithString:logoLink];
-               completion(link, nil);
-           }
-       }];
-    [task resume];
-}
+//- (void)fetchMLBPictures: (NSString * _Nullable)teamName withCompletion:(void (^)(NSURL *link, NSError *error))completion {
+//    //get the bets from endpoint
+//    NSString *endpoint = @"https://www.thesportsdb.com/api/v1/json/1/searchteams.php?t=";
+//    NSString *team = [teamName stringByReplacingOccurrencesOfString:@" " withString:@"+"];
+//
+//    NSString *urlString = [endpoint stringByAppendingString:team];
+//    NSURL *url = [NSURL URLWithString:urlString];
+//    NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:10.0];
+//    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:nil delegateQueue:[NSOperationQueue mainQueue]];
+//    NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+//           if (error != nil) {
+//               completion(nil, error);
+//           }
+//           else {
+//               NSDictionary *dataDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+//               NSArray *teams = dataDictionary[@"teams"];
+//               NSDictionary *team = teams[0];
+//               NSString *logoLink = team[@"strTeamBadge"];
+//               NSURL *link = [NSURL URLWithString:logoLink];
+//               completion(link, nil);
+//           }
+//       }];
+//    [task resume];
+//}
 
 @end

@@ -22,7 +22,7 @@
 @property (strong, nonatomic) NSMutableArray *allEvents;
 @property (strong, nonatomic) NSMutableArray *data;
 @property (strong, nonatomic) NSMutableArray *leagueNames;
-
+@property (strong, nonatomic) UIImage *img;
 
 @end
 
@@ -37,7 +37,7 @@
     
     
     [self.tableView setSeparatorColor:[UIColor grayColor]];
-    self.data = [[NSMutableArray alloc] init];
+    self.data = [NSMutableArray arrayWithCapacity:2];
     self.allEvents = [[NSMutableArray alloc] init];
     self.leagueNames = [[NSMutableArray alloc] init];
     self.leagueNames = [NSMutableArray arrayWithObjects:@"MLB", @"UFC", nil];
@@ -55,7 +55,7 @@
         }   else    {
             self.arrayOfBets = bets;
             [self.allEvents addObjectsFromArray:self.arrayOfBets];
-            [self.data addObject:bets];
+            [self.data insertObject:bets atIndex:1];
             [self.tableView reloadData];
         }
     }];
@@ -70,7 +70,7 @@
         }   else    {
             self.mlbEventArray = bets;
             [self.allEvents addObjectsFromArray:self.mlbEventArray];
-            [self.data addObject:bets];
+            [self.data insertObject:bets atIndex:0];
             [self.tableView reloadData];
         }
     }];
@@ -109,8 +109,11 @@
     
     cell.team1ImageView.layer.borderWidth = (cell.team1ImageView.frame.size.width / 2);
     cell.team2ImageView.layer.borderWidth = (cell.team2ImageView.frame.size.width / 2);
-    cell.team1ImageView.image = event.team1ImageView.image;
-    cell.team2ImageView.image = event.team2ImageView.image;
+    self.img = event.team1Image;
+//    cell.team1ImageView.image = event.team1Image;
+//    [cell.team1ImageView setImage:event.team1Image];
+//    cell.team2ImageView.image = event.team2Image;
+//    [cell.team1ImageView setImage:event.team2Image];
     
     cell.event = event;
     cell.dayLabel.text = event.date;

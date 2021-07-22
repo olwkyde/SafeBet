@@ -177,7 +177,7 @@
                                                     <color key="textColor" systemColor="opaqueSeparatorColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="rP7-hQ-wHs">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Arizona Diamondbacks" translatesAutoresizingMaskIntoConstraints="NO" id="rP7-hQ-wHs">
                                                     <rect key="frame" x="20" y="20" width="25" height="25"/>
                                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                     <constraints>
@@ -221,10 +221,10 @@
                                         <accessibility key="accessibilityConfiguration" identifier="EventCell"/>
                                         <connections>
                                             <outlet property="dayLabel" destination="li4-uc-6Od" id="6LK-qF-wr7"/>
-                                            <outlet property="team1ImageView" destination="rP7-hQ-wHs" id="3CM-A5-KLv"/>
+                                            <outlet property="team1ImageView" destination="rP7-hQ-wHs" id="dYO-8g-gBe"/>
                                             <outlet property="team1Label" destination="MeQ-b5-7R9" id="y2p-sg-lef"/>
                                             <outlet property="team1OddsLabel" destination="cKp-3j-lp1" id="u6y-gc-cDq"/>
-                                            <outlet property="team2ImageView" destination="JQb-Mh-tkj" id="Uuy-hr-KUG"/>
+                                            <outlet property="team2ImageView" destination="JQb-Mh-tkj" id="H3z-zH-RaW"/>
                                             <outlet property="team2Label" destination="6xu-74-nGu" id="W9W-M0-WYR"/>
                                             <outlet property="team2OddsLabel" destination="Uxd-l7-7uN" id="fRe-Di-YHv"/>
                                             <outlet property="timeLabel" destination="sPm-fB-2t6" id="r8a-lZ-e7o"/>
@@ -618,6 +618,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="Arizona Diamondbacks" width="512" height="512"/>
         <image name="companyName" width="306" height="162"/>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
