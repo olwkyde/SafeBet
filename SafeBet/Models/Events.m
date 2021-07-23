@@ -75,37 +75,6 @@
     return self;
 }
 
-//-(void) fetchLogos  {
-//    APIManager *api = [APIManager shared];
-//    
-//    [api fetchMLBPictures:self.team1 withCompletion:^(NSURL *link, NSError *error)  {
-//        if(error)   {
-//            NSLog(@"Error fetching bets: %@", [error localizedDescription]);
-//        }   else if (link == nil)   {
-//            NSLog(@"Tuf");
-//        }
-//        else{
-//            NSData *data = [[NSData alloc] initWithContentsOfURL: link];
-//            UIImage *image = [UIImage imageWithData:data];
-//            UIImage *newImage = [self resizeImage:image withSize:CGSizeMake(25, 25)];
-//            self.team1Image = newImage;
-//        }
-//    }];
-//    
-//    [api fetchMLBPictures:self.team2 withCompletion:^(NSURL *link, NSError *error)  {
-//        if(error)   {
-//            NSLog(@"Error fetching bets: %@", [error localizedDescription]);
-//        }   else if (link == nil)   {
-//            NSLog(@"Tuf");
-//        }
-//        else{
-//            NSData *data = [[NSData alloc] initWithContentsOfURL: link];
-//            UIImage *image = [UIImage imageWithData:data];
-//            UIImage *newImage = [self resizeImage:image withSize:CGSizeMake(25, 25)];
-//            self.team2Image = newImage;
-//        }
-//    }];
-//}
 
 + (NSMutableArray *)eventsWithArray:(NSArray *)dictionaries{
         NSMutableArray *upcomingEvent = [NSMutableArray array];

@@ -7,7 +7,7 @@
 
 #import "MakePickViewController.h"
 #import <QuartzCore/QuartzCore.h>
-#import <Lottie/Lottie-Swift.h>
+#import <Lottie/Lottie.h>
 
 @interface MakePickViewController ()
 
@@ -78,10 +78,32 @@
 
 -(BOOL)team2Selected    {
     return (self.team2Label.textColor == [UIColor greenColor]);
+
 }
 
 - (IBAction)submitButtonPressed:(id)sender {
-
+    //checks if the bet field is empty, 0, or either team isn't selected
+    if (([self.betTextField.text length] == 0 || ([self.betTextField.text intValue] == 0) ) || !([self team1Selected] || [self team2Selected])) {
+        //create a UIAlertController
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Eror"  message:@"You must pick a team and have a bet amount." preferredStyle:(UIAlertControllerStyleAlert)];
+        // create a CANCEL action
+        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            }];
+        //add the CANCEL action to the alert
+        [alert addAction:okAction];
+        // present the alert controller
+        [self presentViewController:alert animated:YES completion:^{
+            // optional code for what happens after the alert controller has finished presenting
+        }];
+    }   else{
+        LOTAnimationView *animation = [LOTAnimationView animationNamed:@"success"];
+        [self.animationView addSubview:animation];
+        [animation setFrame:self.animationView.frame];
+        [animation playWithCompletion:^(BOOL animationFinished) {
+            [self.navigationController popViewControllerAnimated:YES];
+        }];
+       
+    }
 }
 
 
@@ -91,6 +113,7 @@
     self.team2Label.text = self.event.team2;
     NSString *odds1 = [NSString stringWithFormat:@"%d", self.event.team1Odds];
     NSString *odds2 = [NSString stringWithFormat:@"%d", self.event.team2Odds];
+    [self.team1Button setImage:self.event.team1Image forState:UIControlStateNormal];    [self.team2Button setImage:self.event.team2Image forState:UIControlStateNormal];
     
     
     //adding plus sign to positive odds

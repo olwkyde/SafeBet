@@ -31,13 +31,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.data = [NSMutableArray arrayWithCapacity:2];
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     
     
     [self.tableView setSeparatorColor:[UIColor grayColor]];
-    self.data = [NSMutableArray arrayWithCapacity:2];
     self.allEvents = [[NSMutableArray alloc] init];
     self.leagueNames = [[NSMutableArray alloc] init];
     self.leagueNames = [NSMutableArray arrayWithObjects:@"MLB", @"UFC", nil];
@@ -55,7 +55,7 @@
         }   else    {
             self.arrayOfBets = bets;
             [self.allEvents addObjectsFromArray:self.arrayOfBets];
-            [self.data insertObject:bets atIndex:1];
+            [self.data addObject:bets];
             [self.tableView reloadData];
         }
     }];
@@ -70,7 +70,7 @@
         }   else    {
             self.mlbEventArray = bets;
             [self.allEvents addObjectsFromArray:self.mlbEventArray];
-            [self.data insertObject:bets atIndex:0];
+            [self.data addObject:bets];
             [self.tableView reloadData];
         }
     }];
@@ -107,13 +107,12 @@
     EventCell *cell = [tableView dequeueReusableCellWithIdentifier:@"EventCell"];
     Events *event = self.data[indexPath.section][indexPath.row];
     
-    cell.team1ImageView.layer.borderWidth = (cell.team1ImageView.frame.size.width / 2);
-    cell.team2ImageView.layer.borderWidth = (cell.team2ImageView.frame.size.width / 2);
+    cell.team1ImageView.layer.cornerRadius = (cell.team1ImageView.frame.size.width / 2);
+    cell.team2ImageView.layer.cornerRadius = (cell.team2ImageView.frame.size.width / 2);
     self.img = event.team1Image;
-//    cell.team1ImageView.image = event.team1Image;
-//    [cell.team1ImageView setImage:event.team1Image];
-//    cell.team2ImageView.image = event.team2Image;
-//    [cell.team1ImageView setImage:event.team2Image];
+    cell.team1ImageView.image = event.team1Image;
+    cell.team2ImageView.image = event.team2Image;
+
     
     cell.event = event;
     cell.dayLabel.text = event.date;
