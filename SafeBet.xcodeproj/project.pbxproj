@@ -60,6 +60,8 @@
 		BB567AE726A7221C00D81E8F /* MakePickViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MakePickViewController.m; sourceTree = "<group>"; };
 		BB567AEC26A767D800D81E8F /* Bet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Bet.h; sourceTree = "<group>"; };
 		BB567AED26A767D800D81E8F /* Bet.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Bet.m; sourceTree = "<group>"; };
+		BB567AF426AA702D00D81E8F /* Lottie.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Lottie.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB567B0B26AB21C200D81E8F /* Lottie.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Lottie.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB750FE6269E3790005AF740 /* APIManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = APIManager.h; sourceTree = "<group>"; };
 		BB750FE7269E3790005AF740 /* APIManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = APIManager.m; sourceTree = "<group>"; };
 		BB750FE9269E3B42005AF740 /* TheOddsAPIKeys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = TheOddsAPIKeys.plist; sourceTree = "<group>"; };
@@ -128,6 +130,8 @@
 		32CCC42048212FF35E8CC72A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BB567B0B26AB21C200D81E8F /* Lottie.framework */,
+				BB567AF426AA702D00D81E8F /* Lottie.framework */,
 				BBE91A3126994AF600F8A460 /* QuartzCore.framework */,
 				2A55C6D68B4D29BE6338E541 /* Pods_SafeBet.framework */,
 				B4D5EDE1F7F2417D156B6369 /* Pods_SafeBet_SafeBetUITests.framework */,

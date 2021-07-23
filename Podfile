@@ -9,7 +9,7 @@ target 'SafeBet' do
   pod 'AFNetworking'
   pod 'Parse'
   pod 'DateTools'
-  pod 'lottie-ios'
+  pod 'lottie-ios', '~>2.5.3' 
 
   target 'SafeBetTests' do
     inherit! :search_paths
