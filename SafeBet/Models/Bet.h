@@ -6,6 +6,7 @@
 //
 
 #import <Parse/Parse.h>
+#import "Events.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -22,10 +23,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) int *team2Odds; //the Head to Head odds for the second team
 @property (nonatomic, strong) PFFileObject *team1image; // the picture for the first team
 @property (nonatomic, strong) PFFileObject *team2image; // the picture for the first team
-@property (nonatomic, assign) int *betAmount;
+@property (nonatomic, assign) double betAmount; //amount the user bet
+@property (nonatomic, assign) bool *didWinBet; //whether user won the bet
+@property (nonatomic, strong) NSString *betPick; //team user bets to win
+@property (nonatomic, assign) double payout; //the payout that is possible
 
-+(void) postBet: ( NSString * _Nullable )withTeam1 withTeam2: ( NSString * _Nullable )team2 withGameDate: (NSDate * _Nullable)gameDate withTeam1Odds: ( int * _Nullable )team1Odds  withTeam2Odds: ( int * _Nullable )team2Odds withTeam1Image: ( UIImage * _Nullable )image1 withTeam2Image: ( UIImage * _Nullable )image2 withBetAmount: ( int * _Nullable )betAmount  withCompletion: (PFBooleanResultBlock  _Nullable)completion;
-+ (PFFileObject *)getPFFileFromImage: (UIImage * _Nullable)image;
++(void) postBetWithEvent: ( Events * _Nonnull )event withBetAmount: (double)betAmount withBetPick: (NSString * _Nonnull)betPick withCompletion: (PFBooleanResultBlock  _Nullable)completion;
 
 @end
 

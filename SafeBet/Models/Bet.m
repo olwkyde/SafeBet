@@ -14,12 +14,19 @@
     return @"Bet";
 }
 
-+(void) postBet: ( NSString * _Nullable )withTeam1 withTeam2: ( NSString * _Nullable )team2 withGameDate: (NSDate * _Nullable)gameDate withTeam1Odds: ( int * _Nullable )team1Odds  withTeam2Odds: ( int * _Nullable )team2Odds withTeam1Image: ( UIImage * _Nullable )image1 withTeam2Image: ( UIImage * _Nullable )image2 withBetAmount: ( int * _Nullable )betAmount  withCompletion: (PFBooleanResultBlock  _Nullable)completion {
++(void) postBetWithEvent: ( Events * _Nonnull )event withBetAmount: (double)betAmount withBetPick: (NSString * _Nonnull)betPick withCompletion: (PFBooleanResultBlock  _Nullable)completion {
     
     Bet *newBet = [Bet new];
-    newBet.team1image = [self getPFFileFromImage:image1];
-    newBet.team2image = [self getPFFileFromImage:image2];
     newBet.author = [PFUser currentUser];
+    newBet.betAmount = betAmount;
+    newBet.betPick = betPick;
+    newBet.gameDate = event.gameDate;
+    newBet.team1 = event.team1;
+    newBet.team1Odds = event.team1Odds;
+    newBet.team1image = [self getPFFileFromImage:event.team1Image];
+    newBet.team2 = event.team2;
+    newBet.team2Odds = event.team2Odds;
+    newBet.team2image = [self getPFFileFromImage:event.team2Image];
     
     [newBet saveInBackgroundWithBlock:completion];
 }
@@ -30,13 +37,16 @@
     if (!image) {
         return nil;
     }
+    
     NSData *imageData = UIImagePNGRepresentation(image);
     // get image data and check if that is not nil
     if (!imageData) {
         return nil;
-    }    
+    }
+    
     return [PFFileObject fileObjectWithName:@"image.png" data:imageData];
 }
+
 
 
 @end

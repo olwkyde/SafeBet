@@ -8,6 +8,7 @@
 #import "MakePickViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import <Lottie/Lottie.h>
+#import "Bet.h"
 
 @interface MakePickViewController ()
 
@@ -96,10 +97,24 @@
             // optional code for what happens after the alert controller has finished presenting
         }];
     }   else{
+        [self updatePayoutInformation];
         LOTAnimationView *animation = [LOTAnimationView animationNamed:@"success"];
-        [self.animationView addSubview:animation];
+        [self.view addSubview:animation];
         [animation setFrame:self.animationView.frame];
         [animation playWithCompletion:^(BOOL animationFinished) {
+            //make a new Bet
+            Bet *bet = [[Bet alloc] init];
+            bet.payout = self.payoutInt;
+            
+            NSString *teamSelected = [[NSString alloc] init];
+            if ([self team1Selected]) {
+                teamSelected = self.team1Label.text;
+            } else {
+                teamSelected = self.team2Label.text;
+            }
+            
+            [Bet postBetWithEvent:self.event withBetAmount:self.betAmountInt withBetPick:teamSelected withCompletion:nil];
+            
             [self.navigationController popViewControllerAnimated:YES];
         }];
        
@@ -127,6 +142,8 @@
     }   else{
         self.odds2Label.text = [@"+" stringByAppendingString:odds2];
     }
+    
+    self.gameDay = self.event.gameDate;
 }
 
 
