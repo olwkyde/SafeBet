@@ -8,6 +8,7 @@
 #import "Bet.h"
 #import <Parse/Parse.h>
 
+
 @implementation Bet
 
 + (nonnull NSString *)parseClassName {
@@ -22,7 +23,8 @@
     newBet.betPick = betPick;
     newBet.gameDate = event.gameDate;
     newBet.team1 = event.team1;
-    newBet.team1Odds = event.team1Odds;
+    int t1O = *event.team1Odds;
+    newBet.team1Odds = &(t1O);
     newBet.team1image = [self getPFFileFromImage:event.team1Image];
     newBet.team2 = event.team2;
     newBet.team2Odds = event.team2Odds;
