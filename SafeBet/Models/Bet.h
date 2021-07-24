@@ -19,8 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *team2; // The name of the second team/fighter/competitor
 @property (nonatomic, strong) NSDate *gameDate; // the date of the game
 @property (nonatomic, strong) NSString *date; //the day the match/competition/fight is
-@property (nonatomic, assign) int *team1Odds; //the Head to Head odds for the first team
-@property (nonatomic, assign) int *team2Odds; //the Head to Head odds for the second team
+@property (nonatomic, assign) int team1Odds; //the Head to Head odds for the first team
+@property (nonatomic, assign) int team2Odds; //the Head to Head odds for the second team
 @property (nonatomic, strong) PFFileObject *team1image; // the picture for the first team
 @property (nonatomic, strong) PFFileObject *team2image; // the picture for the first team
 @property (nonatomic, assign) double betAmount; //amount the user bet
