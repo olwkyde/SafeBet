@@ -35,6 +35,7 @@
     self.betTextField.layer.borderWidth = 0.3;
     self.betTextField.layer.cornerRadius = 5;
     self.betTextField.layer.borderColor = [UIColor whiteColor].CGColor;
+    [self.navigationController.navigationBar setTitleTextAttributes: @{NSForegroundColorAttributeName:[UIColor whiteColor]}];
     
     //set up the Buttons for each team Image
     self.team1Button.layer.cornerRadius = (self.team1Button.frame.size.width / 2);
@@ -115,7 +116,7 @@
     else{
         [self updatePayoutInformation];
         self.bankAmountLabel.textColor = [UIColor whiteColor];
-        self.bankAmountLabel.text = [NSString stringWithFormat:@"%.2f", (self.bankAmount - self.betAmountInt)];
+        self.bankAmountLabel.text = [@"Bank: " stringByAppendingString:[NSString stringWithFormat:@"%.2f", (self.bankAmount - self.betAmountInt)]];
         
         //set the new bank value
         [PFUser.currentUser setValue:[NSNumber numberWithDouble:(self.bankAmount - self.betAmountInt)] forKey:@"bank"];
@@ -215,15 +216,4 @@
             }
     }
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
 @end

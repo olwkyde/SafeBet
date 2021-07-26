@@ -7,6 +7,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Events.h"
+#import "Bet.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -29,6 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) UIImageView *teamBetOnImageView;
 @property (nonatomic, assign) double payoutInt;
 @property (strong, nonatomic) Events *event;
+@property (strong, nonatomic) Bet *bet;
 
 @end
 

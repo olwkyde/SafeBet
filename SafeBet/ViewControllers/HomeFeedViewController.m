@@ -38,6 +38,10 @@
     // Do any additional setup after loading the view.
     [self fetchUserBets];
     self.data = [NSMutableArray arrayWithCapacity:2];
+    UIImage *titleImage = [UIImage imageNamed:@"logoResized"];
+    UIImageView *titleImageView = [[UIImageView alloc] initWithImage:titleImage];
+    self.navigationItem.titleView = titleImageView;
+    self.navigationController.navigationBar.barTintColor = [UIColor blackColor];
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -96,7 +100,9 @@
     [query includeKey:@"author"];
     [query includeKeys:[NSArray arrayWithObjects:@"author", @"gameDate", @"team2Image", @"team1Image", @"betPick", @"team1", @"team2", @"team1Odds", nil]];
     [query includeKey:@"createdAt"];
-    [query whereKey:@"author" equalTo:[PFUser currentUser]];
+    if ([PFUser currentUser] != nil)    {
+        [query whereKey:@"author" equalTo:[PFUser currentUser]];
+    }
     [query orderByDescending:@"createdAt"];
 
     // fetch data asynchronously
@@ -135,13 +141,21 @@
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if([[segue identifier] isEqualToString:@"MakePickSegue"]){
+    if([[segue identifier] isEqualToString:@"MakeNewPickSegue"]){
         EventCell *tappedCell = sender;
         NSIndexPath *indexPath = [self.tableView indexPathForCell:tappedCell];
         Events *event = self.data[indexPath.section][indexPath.row];
         
         MakePickViewController *makePickViewController = [segue destinationViewController];
         makePickViewController.event = event;
+    }   else{
+        BetCell *tappedCell = sender;
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:tappedCell];
+        Events *event = self.data[indexPath.section][indexPath.row];
+        
+        MakePickViewController *makePickViewController = [segue destinationViewController];
+        makePickViewController.event = event;
+        makePickViewController.navigationItem.title = @"Make New Pick";
     }
 }
 
@@ -150,6 +164,9 @@
     
     EventCell *eventCell = [tableView dequeueReusableCellWithIdentifier:@"EventCell"];
     BetCell *betCell = [tableView dequeueReusableCellWithIdentifier:@"BetCell"];
+    
+    eventCell.selectionStyle = UITableViewCellSelectionStyleDefault;
+    betCell.selectionStyle = UITableViewCellSelectionStyleDefault;
     
     eventCell.layer.cornerRadius = 5;
     betCell.layer.cornerRadius = 5;
@@ -182,12 +199,12 @@
         
 
         //adding plus sign to positive odds
-        if (([odds1 characterAtIndex:0] == 45)) {
+        if (([odds1 characterAtIndex:0] == 45) || ([odds1 characterAtIndex:0] == 43)) {
             betCell.team1OddsLabel.text = odds1;
         }   else{
             betCell.team1OddsLabel.text = [@"+" stringByAppendingString:odds1];
         }
-        if (([odds2 characterAtIndex:0] == 45)) {
+        if (([odds2 characterAtIndex:0] == 45)|| ([odds2 characterAtIndex:0] == 43)) {
             betCell.team2OddsLabel.text = odds2;
         }   else{
             betCell.team2OddsLabel.text = [@"" stringByAppendingString:odds2];
@@ -198,9 +215,6 @@
         }   else {
             [betCell.teamPickedImageView setImageWithURL:team2ImageURL];
         }
-
-        
-
         return betCell;
     }
     
@@ -218,12 +232,12 @@
     
     
     //adding plus sign to positive odds
-    if (([odds1 characterAtIndex:0] == 45)) {
+    if (([odds1 characterAtIndex:0] == 45) || ([odds1 characterAtIndex:0] == 43)) {
         eventCell.team1OddsLabel.text = odds1;
     }   else{
         eventCell.team1OddsLabel.text = [@"+" stringByAppendingString:odds1];
     }
-    if (([odds2 characterAtIndex:0] == 45)) {
+    if (([odds2 characterAtIndex:0] == 45)||([odds2 characterAtIndex:0] == 43)) {
         eventCell.team2OddsLabel.text = odds2;
     }   else{
         eventCell.team2OddsLabel.text = [@"+" stringByAppendingString:odds2];
@@ -242,6 +256,7 @@
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     return self.leagueNames[section];
 }
+
 
 
 @end

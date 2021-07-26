@@ -52,9 +52,21 @@
     NSString *username = self.usernameTextField.text;
     NSString *password = self.passwordTextField.text;
     
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Invalid Sign Up"  message:@"Wrong username or password" preferredStyle:(UIAlertControllerStyleAlert)];
+    
+    // create an OK action
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        // handle response here.
+        }];
+    //add the OK
+    [alert addAction:okAction];
+    
     [PFUser logInWithUsernameInBackground:username password:password block:^(PFUser * user, NSError *  error) {
         if (error != nil) {
             NSLog(@"User log in failed: %@", error.localizedDescription);
+            [self presentViewController:alert animated:YES completion:^{
+                // optional code for what happens after the alert controller has finished presenting
+            }];
         } else {
             // display view controller that needs to shown after successful login
             [self performSegueWithIdentifier:@"FeedSegue" sender:nil];

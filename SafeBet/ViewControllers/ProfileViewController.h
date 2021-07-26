@@ -15,8 +15,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UILabel *betsMadeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *betsWonLabel;
 @property (weak, nonatomic) IBOutlet UILabel *bankLabel;
-@property (weak, nonatomic) IBOutlet UIButton *profileImageButton;
 
+
+-(void) profileImageTapped;
 @end
 
 NS_ASSUME_NONNULL_END

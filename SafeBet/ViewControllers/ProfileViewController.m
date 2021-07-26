@@ -16,7 +16,8 @@
 @interface ProfileViewController () <UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) NSArray *userBets;
-@property (nonatomic, strong) UIRefreshControl *refreshControl;
+@property (nonatomic, strong) UIRefreshControl *viewRefreshControl;
+@property (strong, nonatomic) IBOutlet UITapGestureRecognizer *profileTapGestureRecognizer;
 
 @end
 
@@ -30,17 +31,13 @@
     self.tableView.dataSource = self;
     [self setUpViews];
     [self fetchBets];
+    UITapGestureRecognizer *profileImageTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(profileImageTapped)];
+    [self.profileImageView setUserInteractionEnabled:true];
 }
 
 -(void) setUpViews  {
-    self.refreshControl = [[UIRefreshControl alloc] init];
-    [self.refreshControl addTarget:self action:@selector(fetchBets) forControlEvents:UIControlEventValueChanged];
-    self.tableView.refreshControl = self.refreshControl;
-    [self.tableView insertSubview:self.refreshControl atIndex:0];
-    
     self.usernameLabel.text = [PFUser currentUser].username;
     self.profileImageView.layer.cornerRadius = (self.profileImageView.frame.size.width / 2);
-    self.profileImageButton.layer.cornerRadius = (self.profileImageButton.frame.size.width / 2);
     
     double bankAmount = [[PFUser.currentUser objectForKey:@"bank"] doubleValue];
     self.bankLabel.text = [@"$" stringByAppendingString:[NSString stringWithFormat:@"%.2f", bankAmount]];
@@ -51,11 +48,9 @@
     
     PFFileObject *profileImage = [PFUser.currentUser objectForKey:@"profilePicture"];
     NSURL *profileImageURL = [NSURL URLWithString:profileImage.url];
-    NSData *imageData = [[NSData alloc] initWithContentsOfURL: profileImageURL];
     
-//    [self.profileImageView setImageWithURL:profileImageURL];
-    [self.profileImageButton.imageView setImageWithURL:profileImageURL];
-    [self.profileImageButton setImage:[UIImage imageWithData:imageData] forState:UIControlStateNormal];
+    [self.profileImageView setImageWithURL:profileImageURL];
+    [self.viewRefreshControl endRefreshing];
 }
 
 - (void) fetchBets  {
@@ -76,7 +71,6 @@
             NSLog(@"%@", error.localizedDescription);
         }
     }];
-    [self.refreshControl endRefreshing];
 }
 
 /*
@@ -88,22 +82,6 @@
     // Pass the selected object to the new view controller.
 }
 */
-- (IBAction)profileImageButtonPressed:(id)sender {
-    //instantiate a UIImagePickerController
-    UIImagePickerController *imagePickerVC = [UIImagePickerController new];
-    imagePickerVC.delegate = self;
-    imagePickerVC.allowsEditing = YES;
-    
-    //checks whether there is a valid camera to use; if not, the photo library is used instead
-    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        imagePickerVC.sourceType = UIImagePickerControllerSourceTypeCamera;
-    }   else {
-        imagePickerVC.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-    }
-    
-    //presents the UIImagePickerController
-    [self presentViewController:imagePickerVC animated:YES completion:nil];
-}
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     BetCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"BetCell"];
@@ -164,26 +142,48 @@
     return self.userBets.count;
 }
 
+//presents the image picker controller when the image is tapped
+-(void) profileImageTapped   {
+    //instantiate a UIImagePickerController
+    UIImagePickerController *imagePickerVC = [UIImagePickerController new];
+    imagePickerVC.delegate = self;
+    imagePickerVC.allowsEditing = YES;
+
+    //checks whether there is a valid camera to use; if not, the photo library is used instead
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        imagePickerVC.sourceType = UIImagePickerControllerSourceTypeCamera;
+    }   else {
+        imagePickerVC.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    }
+
+    //presents the UIImagePickerController
+    [self presentViewController:imagePickerVC animated:YES completion:nil];
+}
+
+
+
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
     
     // Get the image captured by the UIImagePickerController
     UIImage *editedImage = info[UIImagePickerControllerEditedImage];
 
     // Resize the image
-    UIImage *finalImage = [self resizeImage:editedImage withSize: CGSizeMake(self.profileImageButton.frame.size.width, self.profileImageButton.frame.size.height)];
+    UIImage *finalImage = [self resizeImage:editedImage withSize: CGSizeMake(self.profileImageView.frame.size.width, self.profileImageView.frame.size.height)];
     
-    //set profileImage to new image
-//    self.profileImageView.image = finalImage;
-    self.profileImageButton.imageView.image = finalImage;
-    [self.profileImageButton setImage:finalImage forState:UIControlStateNormal];
+    self.profileImageView.image = finalImage;
     
     //set user's profile picture in Parse to picture chosen
-    PFFileObject *finalImageFile = [PFFileObject fileObjectWithName:@"profileImage.png" data:UIImagePNGRepresentation(finalImage)];
-    
-    [PFUser.currentUser setValue:finalImageFile forKey:@"profilePicture"];
-    
-    // Dismiss UIImagePickerController to go back to your original view controller
-    [self dismissViewControllerAnimated:YES completion:nil];
+    PFUser *user = [PFUser currentUser];
+    NSData *imageData = UIImagePNGRepresentation(finalImage);
+    PFObject *imageToUpload = [PFFileObject fileObjectWithName:@"profilePicture.png" data:imageData];
+    user[@"profilePicture"] = imageToUpload;
+    [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+        if (succeeded)  {
+            [self dismissViewControllerAnimated:YES completion:nil];
+        }   else{
+            NSLog(@"%@", [error localizedDescription]);
+        }
+    }];
 }
 
 - (UIImage *)resizeImage:(UIImage *)image withSize:(CGSize)size {
