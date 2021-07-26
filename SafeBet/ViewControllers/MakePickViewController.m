@@ -9,12 +9,14 @@
 #import <QuartzCore/QuartzCore.h>
 #import <Lottie/Lottie.h>
 #import "Bet.h"
+#import <Parse/Parse.h>
 
 @interface MakePickViewController ()
 
 @property (nonatomic, assign) double betAmountInt;
 @property (nonatomic, assign) double teamCorrectInt;
 @property (weak, nonatomic) IBOutlet UIView *animationView;
+@property (nonatomic, assign) double bankAmount;
 
 @end
 
@@ -42,6 +44,10 @@
     
     //rounded corners for the submit button
     self.submitButton.layer.cornerRadius = 5;
+    
+    self.bankAmount = [[PFUser.currentUser objectForKey:@"bank"] doubleValue];
+    
+    self.bankAmountLabel.text = [@"Bank: " stringByAppendingString:[NSString stringWithFormat:@"%.2f", self.bankAmount]];
 }
 
 - (IBAction)didTapTeam1Button:(id)sender {
@@ -83,21 +89,41 @@
 }
 
 - (IBAction)submitButtonPressed:(id)sender {
+    //create a UIAlertController
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error"  message:@"You must pick a team and have a bet amount." preferredStyle:(UIAlertControllerStyleAlert)];
+    // create a CANCEL action
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        }];
+    //add the CANCEL action to the alert
+    [alert addAction:okAction];
+    
+    
     //checks if the bet field is empty, 0, or either team isn't selected
-    if (([self.betTextField.text length] == 0 || ([self.betTextField.text intValue] == 0) ) || !([self team1Selected] || [self team2Selected])) {
-        //create a UIAlertController
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Eror"  message:@"You must pick a team and have a bet amount." preferredStyle:(UIAlertControllerStyleAlert)];
-        // create a CANCEL action
-        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            }];
-        //add the CANCEL action to the alert
-        [alert addAction:okAction];
+    if (([self.betTextField.text length] == 0 || ([self.betTextField.text doubleValue] == 0.0) ) || !([self team1Selected] || [self team2Selected])) {
         // present the alert controller
         [self presentViewController:alert animated:YES completion:^{
             // optional code for what happens after the alert controller has finished presenting
         }];
-    }   else{
+    }
+    //show error if bet exceeds the bank
+    else if (self.betAmountInt >= self.bankAmount)  {
+        self.bankAmountLabel.textColor = [UIColor redColor];
+        [alert setMessage:@"Your bet amount cannot exceed your bank"];
+        [self presentViewController:alert animated:YES completion:^{
+        }];
+    }
+    else{
         [self updatePayoutInformation];
+        self.bankAmountLabel.textColor = [UIColor whiteColor];
+        self.bankAmountLabel.text = [NSString stringWithFormat:@"%.2f", (self.bankAmount - self.betAmountInt)];
+        
+        //set the new bank value
+        [PFUser.currentUser setValue:[NSNumber numberWithDouble:(self.bankAmount - self.betAmountInt)] forKey:@"bank"];
+        
+        int betsMade = ([[PFUser.currentUser objectForKey:@"betsMade"] intValue]) + 1;
+        [PFUser.currentUser setValue:[NSNumber numberWithInt:betsMade] forKey:@"betsMade"];
+        
+        //create an animation
         LOTAnimationView *animation = [LOTAnimationView animationNamed:@"success"];
         [self.view addSubview:animation];
         [animation setFrame:self.animationView.frame];
@@ -112,7 +138,7 @@
             } else {
                 teamSelected = self.team2Label.text;
             }
-            
+            //post the Bet
             [Bet postBetWithEvent:self.event withBetAmount:self.betAmountInt withBetPick:teamSelected withCompletion:nil];
             
             [self.navigationController popViewControllerAnimated:YES];
@@ -128,7 +154,7 @@
     self.team2Label.text = self.event.team2;
     NSString *odds1 = [NSString stringWithFormat:@"%d", self.event.team1Odds];
     NSString *odds2 = [NSString stringWithFormat:@"%d", self.event.team2Odds];
-    [self.team1Button setImage:self.event.team1Image forState:UIControlStateNormal];    [self.team2Button setImage:self.event.team2Image forState:UIControlStateNormal];
+    [self.team1Button setImage:self.event.team1Image.image forState:UIControlStateNormal];    [self.team2Button setImage:self.event.team2Image.image forState:UIControlStateNormal];
     
     
     //adding plus sign to positive odds

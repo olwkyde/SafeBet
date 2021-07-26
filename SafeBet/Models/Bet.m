@@ -19,15 +19,16 @@
     
     Bet *newBet = [Bet new];
     newBet.author = [PFUser currentUser];
+
     newBet.betAmount = betAmount;
     newBet.betPick = betPick;
     newBet.gameDate = event.gameDate;
     newBet.team1 = event.team1;
     newBet.team1Odds = event.team1Odds;
-    newBet.team1image = [self getPFFileFromImage:event.team1Image];
+    newBet.team1image = [self getPFFileFromImage:event.team1Image.image];
     newBet.team2 = event.team2;
     newBet.team2Odds = event.team2Odds;
-    newBet.team2image = [self getPFFileFromImage:event.team2Image];
+    newBet.team2image = [self getPFFileFromImage:event.team2Image.image];
     
     [newBet saveInBackgroundWithBlock:completion];
 }

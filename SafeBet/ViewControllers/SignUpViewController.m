@@ -22,11 +22,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self setViewConstraints];
+    [self setupViews];
 }
 
 //set custom border colors for all the views on this view controller
--(void) setViewConstraints  {
+-(void) setupViews  {
     [self.usernameTextField setValue:[UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1.0] forKeyPath:@"placeholderLabel.textColor"];
     [self.passwordTextField setValue:[UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1.0] forKeyPath:@"placeholderLabel.textColor"];
     [self.confirmPasswordTextField setValue:[UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1.0] forKeyPath:@"placeholderLabel.textColor"];
@@ -63,7 +63,6 @@
             [alert setMessage:@"Usernames cannot be empty"];
             //present the alert
             [self presentViewController:alert animated:YES completion:^{
-                // optional code for what happens after the alert controller has finished presenting
             }];
         }   else{
                 //change the alert message
@@ -79,28 +78,24 @@
             [alert setMessage:@"Username is too long."];
             //present the alert
             [self presentViewController:alert animated:YES completion:^{
-                // optional code for what happens after the alert controller has finished presenting
             }];
         }   else if ([self usernameContainsInvalidSymbols]) {
             //change the alert message
             [alert setMessage:@"Usernames can only contain letters, numbers, periods, and underscores"];
             //present the alert
             [self presentViewController:alert animated:YES completion:^{
-                // optional code for what happens after the alert controller has finished presenting
             }];
         }   else if ([self usernameStartsWithInvalidSymbol])  {
             //change the alert message
             [alert setMessage:@"Usernames cannot start with a period"];
             //present the alert
             [self presentViewController:alert animated:YES completion:^{
-                // optional code for what happens after the alert controller has finished presenting
             }];
         }   else if ([self passwordsDoNotMatch])    {
             //change the alert message
             [alert setMessage:@"Passwords do not match"];
             //present the alert
             [self presentViewController:alert animated:YES completion:^{
-            // optional code for what happens after the alert controller has finished presenting
             }];
         }
     }
@@ -163,6 +158,7 @@
     newUser.username = self.usernameTextField.text;
     newUser.password = self.passwordTextField.text;
     
+    
     // call sign up function on the object
     [newUser signUpInBackgroundWithBlock:^(BOOL succeeded, NSError * error) {
         if (error != nil) {
@@ -180,20 +176,8 @@
             
             //present that view controller
             [self presentViewController:loginViewController animated:YES completion:nil];
-    //      [self dismissViewControllerAnimated:YES completion:nil];
         }
     }];
 }
-
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MakePickViewController : UIViewController
+@interface MakePickViewController : UIViewController 
 @property (weak, nonatomic) IBOutlet UIImageView *team1ImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *team2ImageView;
 @property (weak, nonatomic) IBOutlet UIButton *team1Button;

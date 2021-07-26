@@ -32,7 +32,7 @@
         
         NSString *name1 = odd1[@"name"];
         
-        
+        //make the odds divisible by 10
         if ([name1 isEqualToString:self.team1]) {
             self.team1Odds = ([odd1[@"price"] intValue] / 10) * 10;
             self.team2Odds = ([odd2[@"price"] intValue] / 10) * 10;
@@ -43,14 +43,12 @@
         
         NSString *gameDate = dictionary[@"commence_time"];
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-//        [formatter setLocale: [NSLocale localeWithLocaleIdentifier:@"en_US"]];
         [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZZZ"];
-//        formatter.dateFormat = @"yyyy-MM-dd";
         
         self.gameDate = [formatter dateFromString: gameDate];
         
-        int gameHour = self.gameDate.hour;
-        int gameMinute = self.gameDate.minute;
+        int gameHour = (int) self.gameDate.hour;
+        int gameMinute = (int) self.gameDate.minute;
         
         NSString *am = @" AM";
         NSString *pm = @" PM";
@@ -61,15 +59,16 @@
             self.time = [NSString stringWithFormat:@"%d%@%d%@", gameHour, @":", gameMinute, am];
         }
         
-        int gameDay = self.gameDate.day;
-        int gameMonth = self.gameDate.month;
-        int gameYear = (self.gameDate.year % 100);
+        int gameDay = (int) self.gameDate.day;
+        int gameMonth = (int) self.gameDate.month;
+        int gameYear = (((int) self.gameDate.year) % 100);
+        
         
         self.date = [NSString stringWithFormat:@"%d%@%d%@%d", gameMonth, @"/", gameDay, @"/", gameYear];
         
-        if ([self.sport isEqualToString:@"MLB"])   {
-            self.team1Image = [UIImage imageNamed:self.team1];
-            self.team2Image = [UIImage imageNamed:self.team2];
+        if ([self.sport isEqualToString:@"MLB"])   {            
+            self.team1Image = [[UIImageView alloc] initWithImage:[UIImage imageNamed:self.team1]];
+            self.team2Image = [[UIImageView alloc] initWithImage:[UIImage imageNamed:self.team2]];
         }
     }
     return self;
@@ -103,14 +102,18 @@
                 }
             }
         }
-        
-    for (int i = (upcomingEvent.count >= 5) ? 5 : upcomingEvent.count; i >= 0; i--)    {
-        [mainCards addObject:upcomingEvent[upcomingEvent.count - i - 1]];
-    }
-    for (int i = (eventNextWeek.count >= 5) ? 5 : eventNextWeek.count; i >= 0; i--)    {
-        [mainCards addObject:eventNextWeek[eventNextWeek.count - i - 1]];
-    }
-        return mainCards;
+    int upcomingEventCount = (upcomingEvent.count >= 5) ? 5 : upcomingEvent.count;
+    NSRange rangeThisWeek = NSMakeRange(upcomingEvent.count - upcomingEventCount, (upcomingEventCount - 1));
+    
+    NSArray *upComingEventMainCard = [upcomingEvent subarrayWithRange:rangeThisWeek];
+    
+    
+    int nextWeekEventsCount = (eventNextWeek.count >= 5) ? 5 : eventNextWeek.count;
+    NSRange rangeNextWeek = NSMakeRange(eventNextWeek.count - nextWeekEventsCount, (nextWeekEventsCount - 1));
+    NSArray *nextWeekEventMainCard = [eventNextWeek subarrayWithRange:rangeNextWeek];
+    
+    mainCards = [upComingEventMainCard arrayByAddingObjectsFromArray:nextWeekEventMainCard];
+    return mainCards;
 }
 
 
@@ -130,9 +133,15 @@
             NSTimeInterval secondsBetween = [eventDate timeIntervalSinceDate:now];
             int numberOfDays = secondsBetween / 86400;
             
-            if (numberOfDays <= 2) {
+            //checking if date is in the
+            if (numberOfDays <= 2 || ([now compare:eventDate] == NSOrderedAscending)) {
                 Events *event = [[Events alloc] initWithDictionary:dictionary];
-                [events addObject:event];
+                
+                //filters out games with "huge underdogs". the API has some wacky odds for certain games.
+                int underdogOdds = ((event.team1Odds > event.team2Odds) ? event.team1Odds: event.team2Odds);
+                if (underdogOdds < 500) {
+                    [events addObject:event];
+                }
             }
         }
         return events;
