@@ -18,6 +18,9 @@
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
+    self.selectionStyle = UITableViewCellSelectionStyleDefault;
+    
+    self.layer.cornerRadius = 5;
     self.team1ImageView.layer.cornerRadius = (self.team1ImageView.frame.size.width / 2);
     self.team2ImageView.layer.cornerRadius = (self.team2ImageView.frame.size.width / 2);
     self.teamPickedImageView.layer.cornerRadius = (self.teamPickedImageView.frame.size.width /2);

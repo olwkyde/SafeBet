@@ -21,6 +21,7 @@
         self.team1 = dictionary[@"home_team"];
         self.team2 = dictionary[@"away_team"];
         
+        //fetching the odds from the dictionary
         NSArray *bookmakers = dictionary[@"bookmakers"];
         NSDictionary *bookmaker = [bookmakers objectAtIndex:0];
         NSArray *markets = bookmaker[@"markets"];
@@ -47,6 +48,7 @@
         
         self.gameDate = [formatter dateFromString: gameDate];
         
+        //fetching minute and hour for NSDate to display the time
         int gameHour = (int) self.gameDate.hour;
         int gameMinute = (int) self.gameDate.minute;
         
@@ -59,6 +61,7 @@
             self.time = [NSString stringWithFormat:@"%d%@%d%@", gameHour, @":", gameMinute, am];
         }
         
+        //fetching the day month and year to display the day of the game
         int gameDay = (int) self.gameDate.day;
         int gameMonth = (int) self.gameDate.month;
         int gameYear = (((int) self.gameDate.year) % 100);
@@ -66,6 +69,7 @@
         
         self.date = [NSString stringWithFormat:@"%d%@%d%@%d", gameMonth, @"/", gameDay, @"/", gameYear];
         
+        //fetching MLB team logos from Assets
         if ([self.sport isEqualToString:@"MLB"])   {            
             self.team1Image = [[UIImageView alloc] initWithImage:[UIImage imageNamed:self.team1]];
             self.team2Image = [[UIImageView alloc] initWithImage:[UIImage imageNamed:self.team2]];
@@ -74,8 +78,8 @@
     return self;
 }
 
-
-+ (NSMutableArray *)eventsWithArray:(NSArray *)dictionaries{
++ (NSMutableArray *)ufcEventsWithArray:(NSArray *)dictionaries{
+        //create "main card" arrays out of the entries; these will be the last five events of a given night, generally considered the most important and the ones wortwhile to bet on
         NSMutableArray *upcomingEvent = [NSMutableArray array];
         NSMutableArray *eventNextWeek = [NSMutableArray array];
         NSMutableArray *mainCards = [NSMutableArray array];
@@ -102,18 +106,21 @@
                 }
             }
         }
-    int upcomingEventCount = (upcomingEvent.count >= 5) ? 5 : upcomingEvent.count;
-    NSRange rangeThisWeek = NSMakeRange(upcomingEvent.count - upcomingEventCount, (upcomingEventCount - 1));
     
-    NSArray *upComingEventMainCard = [upcomingEvent subarrayWithRange:rangeThisWeek];
+        //counts whether there are at least 5 events returned by the array, if so, take the last 5, if not, take all
+        int upcomingEventCount = (upcomingEvent.count >= 5) ? 5 : upcomingEvent.count;
+        NSRange rangeThisWeek = NSMakeRange(upcomingEvent.count - upcomingEventCount, (upcomingEventCount - 1));
     
+        NSArray *upComingEventMainCard = [upcomingEvent subarrayWithRange:rangeThisWeek];
+        
     
-    int nextWeekEventsCount = (eventNextWeek.count >= 5) ? 5 : eventNextWeek.count;
-    NSRange rangeNextWeek = NSMakeRange(eventNextWeek.count - nextWeekEventsCount, (nextWeekEventsCount - 1));
-    NSArray *nextWeekEventMainCard = [eventNextWeek subarrayWithRange:rangeNextWeek];
+        int nextWeekEventsCount = (eventNextWeek.count >= 5) ? 5 : eventNextWeek.count;
+        NSRange rangeNextWeek = NSMakeRange(eventNextWeek.count - nextWeekEventsCount, (nextWeekEventsCount - 1));
+        NSArray *nextWeekEventMainCard = [eventNextWeek subarrayWithRange:rangeNextWeek];
     
-    mainCards = [upComingEventMainCard arrayByAddingObjectsFromArray:nextWeekEventMainCard];
-    return mainCards;
+        //add last 5 or less events into the array
+        mainCards = [upComingEventMainCard arrayByAddingObjectsFromArray:nextWeekEventMainCard];
+        return mainCards;
 }
 
 
@@ -133,13 +140,13 @@
             NSTimeInterval secondsBetween = [eventDate timeIntervalSinceDate:now];
             int numberOfDays = secondsBetween / 86400;
             
-            //checking if date is in the
-            if (numberOfDays <= 2 || ([now compare:eventDate] == NSOrderedAscending)) {
+            //checking if date is in the future but less than 2 days apart
+            if (numberOfDays <= 2 || (round(secondsBetween) <= 0)) {
                 Events *event = [[Events alloc] initWithDictionary:dictionary];
                 
-                //filters out games with "huge underdogs". the API has some wacky odds for certain games.
+                //filters out games with "huge underdogs". the API has wacky odds for certain games.
                 int underdogOdds = ((event.team1Odds > event.team2Odds) ? event.team1Odds: event.team2Odds);
-                if (underdogOdds < 500) {
+                if (abs(underdogOdds)  < 500) {
                     [events addObject:event];
                 }
             }
@@ -147,7 +154,7 @@
         return events;
 }
 
-//returns image resized
+//returns image resized with size parameter
 -(UIImage *)resizeImage:(UIImage *)image withSize:(CGSize)size  {
     UIImageView *resizeImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
     

@@ -20,12 +20,12 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 
-    [self setViewConstraints];
+    [self setUpViews];
 
 }
 
 //set custom border colors for all the views on this view controller
--(void) setViewConstraints  {
+-(void) setUpViews  {
     //make the placehlder text white
     [self.usernameTextField setValue:[UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1.0] forKeyPath:@"placeholderLabel.textColor"];
     [self.passwordTextField setValue:[UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1.0] forKeyPath:@"placeholderLabel.textColor"];
@@ -47,7 +47,7 @@
     [self loginUser];
 }
 
-
+//performs action of logging in User
 - (void)loginUser {
     NSString *username = self.usernameTextField.text;
     NSString *password = self.passwordTextField.text;
@@ -73,14 +73,4 @@
         }
     }];
 }
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
 @end

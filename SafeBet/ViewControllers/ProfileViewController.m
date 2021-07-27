@@ -12,12 +12,14 @@
 #import "BetCell.h"
 #import "NSDate+DateTools.h"
 #import "UIImageView+AFNetworking.h"
+#import "MakePickViewController.h"
 
 @interface ProfileViewController () <UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) NSArray *userBets;
 @property (nonatomic, strong) UIRefreshControl *viewRefreshControl;
 @property (strong, nonatomic) IBOutlet UITapGestureRecognizer *profileTapGestureRecognizer;
+@property (strong, nonatomic) UIAlertController *alert;
 
 @end
 
@@ -32,8 +34,15 @@
     [self setUpViews];
     [self fetchBets];
     UITapGestureRecognizer *profileImageTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(profileImageTapped)];
+    [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(onTimer) userInfo:nil repeats:true];
     [self.profileImageView setUserInteractionEnabled:true];
 }
+
+- (void)onTimer {
+    [self setUpViews];
+    [self fetchBets];
+}
+
 
 -(void) setUpViews  {
     self.usernameLabel.text = [PFUser currentUser].username;
@@ -73,15 +82,20 @@
     }];
 }
 
-/*
+
 #pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
+//In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    if([[segue identifier] isEqualToString:@"EditPickSegue"])    {
+        BetCell *tappedCell = sender;
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:tappedCell];
+        Bet *bet = self.userBets[indexPath.row];
+        
+        MakePickViewController *makePickViewController = [segue destinationViewController];
+        makePickViewController.bet = bet;
+    }
 }
-*/
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     BetCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"BetCell"];
@@ -198,6 +212,57 @@
     UIGraphicsEndImageContext();
     
     return newImage;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSDate *now = [NSDate date];
+    Bet *bet = [[Bet alloc] init];
+    bet = self.userBets[indexPath.row];
+    
+    if ([now compare:bet.gameDate] == NSOrderedAscending)  {
+        NSString * storyboardName = @"Main";
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];
+        
+        MakePickViewController * makePickViewController = [storyboard instantiateViewControllerWithIdentifier:@"MakePickViewController"];
+        
+        //configure event out of bet
+        Events *event = [self eventOfBet:bet];
+        //set the bet and event to the MakePick Conreoller's bet and event
+        makePickViewController.bet = bet;
+        makePickViewController.event = event;
+        
+        [self presentViewController:makePickViewController animated:YES completion:nil];
+    }   else    {
+        self.alert = [UIAlertController alertControllerWithTitle:@"Error"  message:@"This event already underway or has already ended." preferredStyle:(UIAlertControllerStyleAlert)];
+        // create a CANCEL action
+        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        }];
+        //add an ok action to the alert andn present it 
+        [self.alert addAction:okAction];
+        [self presentViewController:self.alert animated:YES completion:^{
+        }];
+    }
+}
+
+-(Events *)eventOfBet: (Bet *) bet  {
+    Events *event = [[Events alloc] init];
+    event.team1 = bet.team1;
+    event.team2 = bet.team2;
+    event.team1Odds = bet.team1Odds;
+    event.team2Odds = bet.team2Odds;
+    
+    //fetch picture data and set it to the event image
+    PFFileObject *team1Image = bet.team1image;
+    NSData *team1ImageData = [team1Image getData];
+    UIImage *team1Picture = [UIImage imageWithData:team1ImageData];
+    event.team1Image = [[UIImageView alloc] initWithImage:team1Picture];
+    
+    PFFileObject *team2Image = bet.team2image;
+    NSData *team2ImageData = [team2Image getData];
+    UIImage *team2Picture = [UIImage imageWithData:team2ImageData];
+    event.team2Image = [[UIImageView alloc] initWithImage:team2Picture];
+    
+    return event;
 }
 
 @end

@@ -38,10 +38,7 @@
     // Do any additional setup after loading the view.
     [self fetchUserBets];
     self.data = [NSMutableArray arrayWithCapacity:2];
-    UIImage *titleImage = [UIImage imageNamed:@"logoResized"];
-    UIImageView *titleImageView = [[UIImageView alloc] initWithImage:titleImage];
-    self.navigationItem.titleView = titleImageView;
-    self.navigationController.navigationBar.barTintColor = [UIColor blackColor];
+    [self setUpViews];
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -56,30 +53,41 @@
     [self fetchUFCEvents];
 }
 
+//code to be run every 10 seconds
 - (void)onTimer {
-    [self.tableView reloadData];
+    [self fetchUserBets];
 }
 
+//setting up intial settings for title view
+- (void)setUpViews  {
+    UIImage *titleImage = [UIImage imageNamed:@"logoResized"];
+    UIImageView *titleImageView = [[UIImageView alloc] initWithImage:titleImage];
+    self.navigationItem.titleView = titleImageView;
+    self.navigationController.navigationBar.barTintColor = [UIColor blackColor];
+}
+
+//call to fetch UFC Events from the Sports odds API
 - (void) fetchUFCEvents  {
     APIManager *api = [APIManager shared];
-    
-    [api fetchEventsWithCompletion:^(NSArray *bets, NSError *error)  {
+    [api fetchUFCEventsWithCompletion:^(NSArray *events, NSError *error) { 
         if (error)  {
+            NSLog(@"This doesn't work");
             NSLog(@"Error fetching bets: %@", [error localizedDescription]);
         }   else    {
-            self.ufcEventsArray = bets;
+            NSLog(@"This Works");
+            self.ufcEventsArray = events;
             [self.allEvents addObjectsFromArray:self.ufcEventsArray];
             self.leagueNames = [NSMutableArray arrayWithObjects:@"MLB", @"UFC", nil];
-            [self.data addObject:bets];
+            [self.data addObject:events];
             [self.tableView reloadData];
         }
     }];
     [self.refreshControl endRefreshing];
 }
 
+//call to fetch MLB events from the Sports odds API
 - (void) fetchMLBEvents {
     APIManager *api = [APIManager shared];
-    
     [api fetchMLBEventsWithCompletion:^(NSArray *bets, NSError *error)  {
         if (error)  {
             NSLog(@"Error fetching bets: %@", [error localizedDescription]);
@@ -94,6 +102,7 @@
     [self.refreshControl endRefreshing];
 }
 
+//fetches user Bets from the Parse Database to cross-reference with the events displayed on the TableView
 - (void) fetchUserBets  {
     // construct query
     PFQuery *query = [PFQuery queryWithClassName:@"Bet"];
@@ -116,6 +125,7 @@
     }];
 }
 
+//checks whether a bet the user has placed with the same Event exists
 -(Bet *)betExitsForEvent:(nonnull Events*)event  {
     for (Bet *bet in self.userBets) {
         if ([bet.team1 isEqualToString:event.team1] && [bet.team2 isEqualToString:event.team2] && [bet.gameDate isEqualToDate:event.gameDate])  {
@@ -124,12 +134,10 @@
     }   return nil;
 }
 
-
-
+//performs logout function when the logout button is pressed
 - (IBAction)logOutButton:(id)sender {
     [PFUser logOutInBackgroundWithBlock:^(NSError * _Nullable error) {
         SceneDelegate *myDelegate = (SceneDelegate *)self.view.window.windowScene.delegate;
-
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         LoginViewController *loginViewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
         myDelegate.window.rootViewController = loginViewController;
@@ -148,14 +156,36 @@
         
         MakePickViewController *makePickViewController = [segue destinationViewController];
         makePickViewController.event = event;
+        makePickViewController.warningLabel.alpha = 0;
     }   else{
         BetCell *tappedCell = sender;
         NSIndexPath *indexPath = [self.tableView indexPathForCell:tappedCell];
         Events *event = self.data[indexPath.section][indexPath.row];
+        Bet *bet = [self betExitsForEvent:event];
         
         MakePickViewController *makePickViewController = [segue destinationViewController];
         makePickViewController.event = event;
+        makePickViewController.bet = bet;
+        
+        //setting up new controller with new title and team picked highlighted
         makePickViewController.navigationItem.title = @"Make New Pick";
+        makePickViewController.betTextField.text = [NSString stringWithFormat:@"%.2f", bet.betAmount];
+        if ([bet.betPick isEqualToString:bet.team1])    {
+            makePickViewController.team1Label.textColor = [UIColor greenColor];
+        }   else{
+            makePickViewController.team2Label.textColor = [UIColor greenColor];
+        }
+        
+    }
+}
+
+//configures odds so that underdogs get the '+' symbol in front of the odds (an underdog can have +100 odds)
+- (NSString *) configureOdds: (nonnull int *) odd{
+    NSString *oddString = [NSString stringWithFormat:@"%d", odd];
+    if ((([oddString characterAtIndex:0] == 45) || ([oddString characterAtIndex:0] == 43 && [oddString intValue] != 0)) || [oddString isEqualToString:@"100"]) {
+        return oddString;
+    }   else{
+        return [@"+" stringByAppendingString:oddString];
     }
 }
 
@@ -168,19 +198,12 @@
     eventCell.selectionStyle = UITableViewCellSelectionStyleDefault;
     betCell.selectionStyle = UITableViewCellSelectionStyleDefault;
     
-    eventCell.layer.cornerRadius = 5;
-    betCell.layer.cornerRadius = 5;
-    
     Events *event = self.data[indexPath.section][indexPath.row];
-    
-    //odds in string form (only here because it is used for both the betCell configuration and the eventCell configuration
-    NSString *odds1 = [NSString stringWithFormat:@"%d", event.team1Odds];
-    NSString *odds2 = [NSString stringWithFormat:@"%d", event.team2Odds];
-    
     Bet *bet = [[Bet alloc] init];
+    
+    //checking if bet exists for the event
     bet = [self betExitsForEvent:event];
     if (bet != nil) {
-
         betCell.betAmountLabel.text = [NSString stringWithFormat:@"%.2f", bet.betAmount];
 
         betCell.dayLabel.text = event.date;
@@ -196,53 +219,30 @@
 
         betCell.team1Label.text = bet.team1;
         betCell.team2Label.text = bet.team2;
-        
-
-        //adding plus sign to positive odds
-        if (([odds1 characterAtIndex:0] == 45) || ([odds1 characterAtIndex:0] == 43)) {
-            betCell.team1OddsLabel.text = odds1;
-        }   else{
-            betCell.team1OddsLabel.text = [@"+" stringByAppendingString:odds1];
-        }
-        if (([odds2 characterAtIndex:0] == 45)|| ([odds2 characterAtIndex:0] == 43)) {
-            betCell.team2OddsLabel.text = odds2;
-        }   else{
-            betCell.team2OddsLabel.text = [@"" stringByAppendingString:odds2];
-        }
+        betCell.team1OddsLabel.text = [self configureOdds:bet.team1Odds];
+        betCell.team2OddsLabel.text = [self configureOdds:bet.team2Odds];
 
         if ([bet.betPick isEqualToString:bet.team1])    {
             [betCell.teamPickedImageView setImageWithURL:team1ImageURL];
         }   else {
             [betCell.teamPickedImageView setImageWithURL:team2ImageURL];
         }
+        
         return betCell;
+    }   else{
+        eventCell.team1ImageView.image = event.team1Image.image;
+        eventCell.team2ImageView.image = event.team2Image.image;
+        eventCell.team1OddsLabel.text = [self configureOdds:event.team1Odds];
+        eventCell.team2OddsLabel.text = [self configureOdds:event.team2Odds];
+        eventCell.event = event;
+        eventCell.dayLabel.text = event.date;
+        eventCell.timeLabel.text = event.time;
+        eventCell.team1Label.text = event.team1;
+        eventCell.team2Label.text = event.team2;
+       
+        return eventCell;
     }
-    
-    eventCell.team1ImageView.layer.cornerRadius = (eventCell.team1ImageView.frame.size.width / 2);
-    eventCell.team2ImageView.layer.cornerRadius = (eventCell.team2ImageView.frame.size.width / 2);
-    eventCell.team1ImageView.image = event.team1Image.image;
-    eventCell.team2ImageView.image = event.team2Image.image;
 
-    
-    eventCell.event = event;
-    eventCell.dayLabel.text = event.date;
-    eventCell.timeLabel.text = event.time;
-    eventCell.team1Label.text = event.team1;
-    eventCell.team2Label.text = event.team2;
-    
-    
-    //adding plus sign to positive odds
-    if (([odds1 characterAtIndex:0] == 45) || ([odds1 characterAtIndex:0] == 43)) {
-        eventCell.team1OddsLabel.text = odds1;
-    }   else{
-        eventCell.team1OddsLabel.text = [@"+" stringByAppendingString:odds1];
-    }
-    if (([odds2 characterAtIndex:0] == 45)||([odds2 characterAtIndex:0] == 43)) {
-        eventCell.team2OddsLabel.text = odds2;
-    }   else{
-        eventCell.team2OddsLabel.text = [@"+" stringByAppendingString:odds2];
-    }
-    return eventCell;
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -256,7 +256,5 @@
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     return self.leagueNames[section];
 }
-
-
 
 @end

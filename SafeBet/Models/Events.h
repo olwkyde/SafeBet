@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) UIImageView *team1Image; // the image for the first team/fighter/competitor
 @property (nonatomic, strong) UIImageView *team2Image; // the image for the second team/fighter/competitor
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary;
-+ (NSMutableArray *)eventsWithArray:(NSArray *)dictionaries;
++ (NSMutableArray *)ufcEventsWithArray:(NSArray *)dictionaries;
 + (NSMutableArray *)mlbEventsWithArray:(NSArray *)dictionaries;
 
 @end

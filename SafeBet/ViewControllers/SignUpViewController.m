@@ -170,10 +170,6 @@
             
             LoginViewController * loginViewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
             
-            //set the instance's username and password field to what was inputed in this view controller
-            loginViewController.usernameTextField.text = self.usernameTextField.text;
-            loginViewController.passwordTextField.text = self.passwordTextField.text;
-            
             //present that view controller
             [self presentViewController:loginViewController animated:YES completion:nil];
         }

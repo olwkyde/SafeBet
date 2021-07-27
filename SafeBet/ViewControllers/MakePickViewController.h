@@ -28,6 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UILabel *teamCorrectAmountLabel;
 @property (weak, nonatomic) IBOutlet UILabel *payoutAmountLabel;
 @property (nonatomic, strong) UIImageView *teamBetOnImageView;
+@property (weak, nonatomic) IBOutlet UILabel *warningLabel;
 @property (nonatomic, assign) double payoutInt;
 @property (strong, nonatomic) Events *event;
 @property (strong, nonatomic) Bet *bet;

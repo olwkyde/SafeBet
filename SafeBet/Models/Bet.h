@@ -27,9 +27,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) bool *didWinBet; //whether user won the bet
 @property (nonatomic, strong) NSString *betPick; //team user bets to win
 @property (nonatomic, assign) double payout; //the payout that is possible
+@property (nonatomic, strong) NSArray *userBets;
 
 +(void) postBetWithEvent: ( Events * _Nonnull )event withBetAmount: (double)betAmount withBetPick: (NSString * _Nonnull)betPick withCompletion: (PFBooleanResultBlock  _Nullable)completion;
-
+- (void) deleteBet;
 @end
 
 NS_ASSUME_NONNULL_END

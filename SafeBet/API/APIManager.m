@@ -31,7 +31,7 @@ static NSString * const baseURLString = @"https://the-odds-api.com/liveapi/guide
     return key;
 }
 
-- (void)fetchEventsWithCompletion:(void (^)(NSArray *events, NSError *error))completion {
+- (void)fetchUFCEventsWithCompletion:(void (^)(NSArray *events, NSError *error))completion {
     //get the bets from endpoint
     NSString *key = [self getAPIKey];
     NSString *endpoint = @"https://api.the-odds-api.com/v4/sports/mma_mixed_martial_arts/odds/?regions=us&markets=h2h,spreads&oddsFormat=american&apiKey=";
@@ -46,7 +46,7 @@ static NSString * const baseURLString = @"https://the-odds-api.com/liveapi/guide
            }
            else {
                NSArray *dataDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-               NSMutableArray *events = [Events eventsWithArray:dataDictionary];
+               NSMutableArray *events = [Events ufcEventsWithArray:dataDictionary];
                completion(events, nil);
            }
        }];
@@ -76,3 +76,4 @@ static NSString * const baseURLString = @"https://the-odds-api.com/liveapi/guide
     [task resume];
 }
 @end
+
