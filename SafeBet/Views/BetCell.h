@@ -22,6 +22,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UILabel *betAmountLabel;
 @property (weak, nonatomic) IBOutlet UILabel *payoutLabel;
 @property (weak, nonatomic) IBOutlet UILabel *yourPickOdds;
+@property (weak, nonatomic) IBOutlet UILabel *payoutAmountLabel;
+
 
 @end
 

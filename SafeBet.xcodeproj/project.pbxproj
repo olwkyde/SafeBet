@@ -14,6 +14,7 @@
 		BB750FEE269E51FF005AF740 /* EventCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB750FED269E51FF005AF740 /* EventCell.m */; };
 		BB78C7E826AC50BA00BCFD2B /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB78C7E726AC50BA00BCFD2B /* ProfileViewController.m */; };
 		BB78C7EB26AC51D600BCFD2B /* BetCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB78C7EA26AC51D600BCFD2B /* BetCell.m */; };
+		BB78C7EE26B06E4900BCFD2B /* HTMLManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BB78C7ED26B06E4900BCFD2B /* HTMLManager.m */; };
 		BBBFA0DE269F38ED000FB23E /* Events.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBFA0DD269F38ED000FB23E /* Events.m */; };
 		BBD0A39626993FC500D1E837 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD0A39526993FC500D1E837 /* AppDelegate.m */; };
 		BBD0A39926993FC500D1E837 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD0A39826993FC500D1E837 /* SceneDelegate.m */; };
@@ -72,6 +73,10 @@
 		BB78C7E726AC50BA00BCFD2B /* ProfileViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
 		BB78C7E926AC51D600BCFD2B /* BetCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BetCell.h; sourceTree = "<group>"; };
 		BB78C7EA26AC51D600BCFD2B /* BetCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BetCell.m; sourceTree = "<group>"; };
+		BB78C7EC26B06E4900BCFD2B /* HTMLManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTMLManager.h; sourceTree = "<group>"; };
+		BB78C7ED26B06E4900BCFD2B /* HTMLManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTMLManager.m; sourceTree = "<group>"; };
+		BB78C7EF26B06FA900BCFD2B /* Ono.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Ono.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB78C7F826B071ED00BCFD2B /* Ono.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Ono.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBBFA0DC269F38ED000FB23E /* Events.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Events.h; sourceTree = "<group>"; };
 		BBBFA0DD269F38ED000FB23E /* Events.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Events.m; sourceTree = "<group>"; };
 		BBD0A39126993FC500D1E837 /* SafeBet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SafeBet.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -133,6 +138,8 @@
 		32CCC42048212FF35E8CC72A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BB78C7F826B071ED00BCFD2B /* Ono.framework */,
+				BB78C7EF26B06FA900BCFD2B /* Ono.framework */,
 				BB567B0B26AB21C200D81E8F /* Lottie.framework */,
 				BB567AF426AA702D00D81E8F /* Lottie.framework */,
 				BBE91A3126994AF600F8A460 /* QuartzCore.framework */,
@@ -148,6 +155,8 @@
 			children = (
 				BB750FE6269E3790005AF740 /* APIManager.h */,
 				BB750FE7269E3790005AF740 /* APIManager.m */,
+				BB78C7EC26B06E4900BCFD2B /* HTMLManager.h */,
+				BB78C7ED26B06E4900BCFD2B /* HTMLManager.m */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -507,6 +516,7 @@
 				BBD0A39626993FC500D1E837 /* AppDelegate.m in Sources */,
 				BB567AEE26A767D800D81E8F /* Bet.m in Sources */,
 				BBE91A3826997CFF00F8A460 /* HomeFeedViewController.m in Sources */,
+				BB78C7EE26B06E4900BCFD2B /* HTMLManager.m in Sources */,
 				BBE91A35269953F100F8A460 /* SignUpViewController.m in Sources */,
 				BBBFA0DE269F38ED000FB23E /* Events.m in Sources */,
 				BB750FE8269E3790005AF740 /* APIManager.m in Sources */,

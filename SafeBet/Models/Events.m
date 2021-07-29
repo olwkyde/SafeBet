@@ -9,6 +9,7 @@
 #import "NSDate+DateTools.h"
 #import "UIImageView+AFNetworking.h"
 #import "APIManager.h"
+#import "HTMLManager.h"
 
 
 @implementation Events
@@ -73,6 +74,28 @@
         if ([self.sport isEqualToString:@"MLB"])   {            
             self.team1Image = [[UIImageView alloc] initWithImage:[UIImage imageNamed:self.team1]];
             self.team2Image = [[UIImageView alloc] initWithImage:[UIImage imageNamed:self.team2]];
+        }   else{
+            //fetching UFC fighter images
+            HTMLManager *html = [HTMLManager shared];
+            [html fetchUFCPictureWithName:self.team1 withCompletion:^(NSURL * _Nonnull url, NSError * _Nonnull error) {
+                if (url == nil)    {
+                    self.team1Image.image = [UIImage imageNamed:@"placeholder profile"];
+                }   else{
+                    NSData *team1ImageData = [[NSData alloc] initWithContentsOfURL:url];
+                    UIImage *team1Image = [UIImage imageWithData:team1ImageData];
+                    self.team1Image = [[UIImageView alloc] initWithImage:team1Image];
+                    
+                }
+            }];
+            [html fetchUFCPictureWithName:self.team2 withCompletion:^(NSURL * _Nonnull url, NSError * _Nonnull error) {
+                if (url == nil)    {
+                    self.team1Image.image = [UIImage imageNamed:@"placeholder profile"];
+                }   else{
+                    NSData *team2ImageData = [[NSData alloc] initWithContentsOfURL:url];
+                    UIImage *team2Image = [UIImage imageWithData:team2ImageData];
+                    self.team2Image = [[UIImageView alloc] initWithImage:team2Image];
+                }
+            }];
         }
     }
     return self;
@@ -106,7 +129,6 @@
                 }
             }
         }
-    
         //counts whether there are at least 5 events returned by the array, if so, take the last 5, if not, take all
         int upcomingEventCount = (upcomingEvent.count >= 5) ? 5 : upcomingEvent.count;
         NSRange rangeThisWeek = NSMakeRange(upcomingEvent.count - upcomingEventCount, (upcomingEventCount - 1));
@@ -141,7 +163,7 @@
             int numberOfDays = secondsBetween / 86400;
             
             //checking if date is in the future but less than 2 days apart
-            if (numberOfDays <= 2 || (round(secondsBetween) <= 0)) {
+            if (numberOfDays <= 2 && (round(secondsBetween) >= 0)) {
                 Events *event = [[Events alloc] initWithDictionary:dictionary];
                 
                 //filters out games with "huge underdogs". the API has wacky odds for certain games.

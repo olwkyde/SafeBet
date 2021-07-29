@@ -36,14 +36,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self fetchUserBets];
+    [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(onTimer) userInfo:nil repeats:true];
     self.data = [NSMutableArray arrayWithCapacity:2];
     [self setUpViews];
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView setSeparatorColor:[UIColor grayColor]];
-    [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(onTimer) userInfo:nil repeats:true];
     
     self.allEvents = [[NSMutableArray alloc] init];
     self.leagueNames = [[NSMutableArray alloc] init];
@@ -71,10 +70,8 @@
     APIManager *api = [APIManager shared];
     [api fetchUFCEventsWithCompletion:^(NSArray *events, NSError *error) { 
         if (error)  {
-            NSLog(@"This doesn't work");
             NSLog(@"Error fetching bets: %@", [error localizedDescription]);
         }   else    {
-            NSLog(@"This Works");
             self.ufcEventsArray = events;
             [self.allEvents addObjectsFromArray:self.ufcEventsArray];
             self.leagueNames = [NSMutableArray arrayWithObjects:@"MLB", @"UFC", nil];

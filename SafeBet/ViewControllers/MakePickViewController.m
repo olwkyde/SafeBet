@@ -186,6 +186,7 @@
         } else {
             teamSelected = self.team2Label.text;
         }
+        
         //post the Bet
         [Bet postBetWithEvent:self.event withBetAmount:self.betAmountInt withBetPick:teamSelected withCompletion:nil];
         
@@ -196,7 +197,7 @@
 //configures odds so that underdogs get the '+' symbol in front of the odds (an underdog can have +100 odds)
 - (NSString *) configureOdds: (nonnull int *) odd{
     NSString *oddString = [NSString stringWithFormat:@"%d", odd];
-    if ((([oddString characterAtIndex:0] == 45) || ([oddString characterAtIndex:0] == 43 && [oddString intValue] != 0)) || [oddString isEqualToString:@"100"]) {
+    if ((([oddString characterAtIndex:0] == 45) || ([oddString characterAtIndex:0] == 43 && [oddString intValue] != 0))) {
         return oddString;
     }   else{
         return [@"+" stringByAppendingString:oddString];

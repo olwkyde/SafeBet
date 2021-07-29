@@ -24,13 +24,17 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) PFFileObject *team1image; // the picture for the first team
 @property (nonatomic, strong) PFFileObject *team2image; // the picture for the first team
 @property (nonatomic, assign) double betAmount; //amount the user bet
-@property (nonatomic, assign) bool *didWinBet; //whether user won the bet
+@property (nonatomic, assign) bool didWinBet; //whether user won the bet
 @property (nonatomic, strong) NSString *betPick; //team user bets to win
-@property (nonatomic, assign) double payout; //the payout that is possible
-@property (nonatomic, strong) NSArray *userBets;
+@property (nonatomic, assign) double payout; //the payout the user wins
+@property (nonatomic, strong) NSString *sport; //the sport the bet is in
+@property (nonatomic, assign) double payoutPossible; //the payout the user can get if they win
 
 +(void) postBetWithEvent: ( Events * _Nonnull )event withBetAmount: (double)betAmount withBetPick: (NSString * _Nonnull)betPick withCompletion: (PFBooleanResultBlock  _Nullable)completion;
 - (void) deleteBet;
+-(void) wonBet;
+-(void) lostBet;
+- (double) getPayoutAmountWithBet;
 @end
 
 NS_ASSUME_NONNULL_END

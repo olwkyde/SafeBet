@@ -38,6 +38,13 @@
     }   else{
         self.team2OddsLabel.text = [@"+" stringByAppendingString:odds2];
     }
+    
+    if ([self.team1OddsLabel.text isEqualToString:@"100"] || [self.team1OddsLabel.text isEqualToString:@"-100"])    {
+        self.team1OddsLabel.text = @"+100";
+    }
+    if ([self.team2OddsLabel.text isEqualToString:@"100"] || [self.team2OddsLabel.text isEqualToString:@"-100"])    {
+        self.team2OddsLabel.text = @"+100";
+    }
 }
 
 @end

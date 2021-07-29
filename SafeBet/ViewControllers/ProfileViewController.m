@@ -13,6 +13,7 @@
 #import "NSDate+DateTools.h"
 #import "UIImageView+AFNetworking.h"
 #import "MakePickViewController.h"
+#import "HTMLManager.h"
 
 @interface ProfileViewController () <UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -47,6 +48,8 @@
 -(void) setUpViews  {
     self.usernameLabel.text = [PFUser currentUser].username;
     self.profileImageView.layer.cornerRadius = (self.profileImageView.frame.size.width / 2);
+    
+    self.tableView.layer.borderColor = [UIColor whiteColor].CGColor;
     
     double bankAmount = [[PFUser.currentUser objectForKey:@"bank"] doubleValue];
     self.bankLabel.text = [@"$" stringByAppendingString:[NSString stringWithFormat:@"%.2f", bankAmount]];
@@ -104,6 +107,31 @@
     Bet *bet = [[Bet alloc] init];
     bet = self.userBets[indexPath.row];
     
+    //check MLB events for whether they've been won 12 hours after they have occured
+    NSDate *now = [NSDate date];
+    NSTimeInterval secondsBetween = [now timeIntervalSinceDate:bet.gameDate];
+    int numberOfHours = secondsBetween / 3600;
+    
+    //check for sports that haven't been checked yet
+    if (numberOfHours >= 12  && bet.payout == -1.0 && [bet.sport isEqualToString:@"MLB"])    {
+        HTMLManager *htmlManager = [HTMLManager shared];
+        bool didWinBet = [htmlManager didWinMLBBet:bet];
+        if (didWinBet)  {
+            [bet wonBet];
+        }   else{
+            [bet lostBet];
+        }
+    }
+    
+    //display the payout based on whether the user won the bet
+    if (bet.payout > 0.0)   {
+        cell.payoutAmountLabel.text = [NSString stringWithFormat: @"%.2f", bet.payout];
+        cell.payoutAmountLabel.textColor = [UIColor greenColor];
+    }   else if (bet.payout == 0)   {
+        cell.payoutAmountLabel.text = [@"$" stringByAppendingString:[NSString stringWithFormat:@"%.2f", bet.payout]];
+        cell.payoutAmountLabel.textColor = [UIColor redColor];
+    }
+    
     cell.betAmountLabel.text = [@"$" stringByAppendingString:[NSString stringWithFormat:@"%.2f", bet.betAmount]];
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZZZ"];
@@ -117,6 +145,8 @@
     NSString *pm = @" PM";
     if (gameHour > 12) {
         gameHour = gameHour - 12;
+        cell.timeLabel.text = [NSString stringWithFormat:@"%d%@%02d%@", gameHour, @":", gameMinute, pm];
+    }   else if (gameHour == 12)    {
         cell.timeLabel.text = [NSString stringWithFormat:@"%d%@%02d%@", gameHour, @":", gameMinute, pm];
     }   else{
         cell.timeLabel.text = [NSString stringWithFormat:@"%d%@%d%@", gameHour, @":", gameMinute, am];
@@ -261,6 +291,7 @@
     NSData *team2ImageData = [team2Image getData];
     UIImage *team2Picture = [UIImage imageWithData:team2ImageData];
     event.team2Image = [[UIImageView alloc] initWithImage:team2Picture];
+    event.gameDate = bet.gameDate;
     
     return event;
 }
