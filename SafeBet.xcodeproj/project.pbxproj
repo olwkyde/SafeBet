@@ -15,6 +15,7 @@
 		BB78C7E826AC50BA00BCFD2B /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB78C7E726AC50BA00BCFD2B /* ProfileViewController.m */; };
 		BB78C7EB26AC51D600BCFD2B /* BetCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB78C7EA26AC51D600BCFD2B /* BetCell.m */; };
 		BB78C7EE26B06E4900BCFD2B /* HTMLManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BB78C7ED26B06E4900BCFD2B /* HTMLManager.m */; };
+		BB78C85126B4212B00BCFD2B /* ParseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BB78C85026B4212B00BCFD2B /* ParseManager.m */; };
 		BBBFA0DE269F38ED000FB23E /* Events.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBFA0DD269F38ED000FB23E /* Events.m */; };
 		BBD0A39626993FC500D1E837 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD0A39526993FC500D1E837 /* AppDelegate.m */; };
 		BBD0A39926993FC500D1E837 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD0A39826993FC500D1E837 /* SceneDelegate.m */; };
@@ -77,6 +78,8 @@
 		BB78C7ED26B06E4900BCFD2B /* HTMLManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTMLManager.m; sourceTree = "<group>"; };
 		BB78C7EF26B06FA900BCFD2B /* Ono.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Ono.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB78C7F826B071ED00BCFD2B /* Ono.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Ono.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB78C84F26B4212B00BCFD2B /* ParseManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParseManager.h; sourceTree = "<group>"; };
+		BB78C85026B4212B00BCFD2B /* ParseManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ParseManager.m; sourceTree = "<group>"; };
 		BBBFA0DC269F38ED000FB23E /* Events.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Events.h; sourceTree = "<group>"; };
 		BBBFA0DD269F38ED000FB23E /* Events.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Events.m; sourceTree = "<group>"; };
 		BBD0A39126993FC500D1E837 /* SafeBet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SafeBet.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -157,6 +160,8 @@
 				BB750FE7269E3790005AF740 /* APIManager.m */,
 				BB78C7EC26B06E4900BCFD2B /* HTMLManager.h */,
 				BB78C7ED26B06E4900BCFD2B /* HTMLManager.m */,
+				BB78C84F26B4212B00BCFD2B /* ParseManager.h */,
+				BB78C85026B4212B00BCFD2B /* ParseManager.m */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -521,6 +526,7 @@
 				BBBFA0DE269F38ED000FB23E /* Events.m in Sources */,
 				BB750FE8269E3790005AF740 /* APIManager.m in Sources */,
 				BBD0A3A726993FC700D1E837 /* main.m in Sources */,
+				BB78C85126B4212B00BCFD2B /* ParseManager.m in Sources */,
 				BB78C7EB26AC51D600BCFD2B /* BetCell.m in Sources */,
 				BBD0A39926993FC500D1E837 /* SceneDelegate.m in Sources */,
 				BB750FEE269E51FF005AF740 /* EventCell.m in Sources */,

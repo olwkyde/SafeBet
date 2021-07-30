@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)shared;
 -(void) fetchUFCPictureWithName:(nonnull NSString *)fighterName withCompletion:(void (^)(NSURL *url, NSError *error))completion;
 -(bool) didWinMLBBet:(Bet * _Nonnull)bet;
+-(bool) didWinUFCBetWithBet:(Bet * _Nonnull)bet;
 
 @end
 

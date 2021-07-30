@@ -761,7 +761,7 @@
                                                     </constraints>
                                                 </view>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="idm-mi-8of">
-                                                    <rect key="frame" x="327.66666666666669" y="28.666666666666671" width="23.666666666666686" height="12"/>
+                                                    <rect key="frame" x="322.66666666666669" y="28.666666666666671" width="23.666666666666686" height="12"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                                     <color key="textColor" systemColor="opaqueSeparatorColor"/>
                                                     <nil key="highlightedColor"/>
@@ -779,7 +779,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Day" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lcx-rN-8J5">
-                                                    <rect key="frame" x="330.33333333333331" y="11.666666666666664" width="18.666666666666686" height="12"/>
+                                                    <rect key="frame" x="325" y="11.666666666666664" width="18.666666666666686" height="12"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                                     <color key="textColor" systemColor="opaqueSeparatorColor"/>
                                                     <nil key="highlightedColor"/>
@@ -821,7 +821,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Payout" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N7u-WB-LLm">
-                                                    <rect key="frame" x="320.33333333333331" y="45.666666666666664" width="38.666666666666686" height="15"/>
+                                                    <rect key="frame" x="315" y="45.666666666666664" width="38.666666666666686" height="15"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <color key="textColor" systemColor="opaqueSeparatorColor"/>
                                                     <nil key="highlightedColor"/>
@@ -833,7 +833,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IBt-sm-bwB">
-                                                    <rect key="frame" x="319.66666666666669" y="70.666666666666671" width="39.666666666666686" height="19.333333333333329"/>
+                                                    <rect key="frame" x="314.66666666666669" y="70.666666666666671" width="39.666666666666686" height="19.333333333333329"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -863,7 +863,7 @@
                                                 <constraint firstItem="ToA-X2-vnT" firstAttribute="leading" secondItem="8Ue-2f-2i1" secondAttribute="leading" constant="20" id="bzD-ku-jxx"/>
                                                 <constraint firstItem="nwF-Sr-gTQ" firstAttribute="top" secondItem="8Ue-2f-2i1" secondAttribute="top" constant="20" id="cMF-Df-fec"/>
                                                 <constraint firstItem="2w9-3j-zo5" firstAttribute="top" secondItem="734-KP-lU5" secondAttribute="bottom" constant="5" id="czB-QF-aIl"/>
-                                                <constraint firstItem="Lcx-rN-8J5" firstAttribute="leading" secondItem="9Ec-b6-2iO" secondAttribute="trailing" constant="40.329999999999998" id="fLx-BC-T2B"/>
+                                                <constraint firstItem="Lcx-rN-8J5" firstAttribute="leading" secondItem="9Ec-b6-2iO" secondAttribute="trailing" constant="35" id="fLx-BC-T2B"/>
                                                 <constraint firstItem="xvn-Jd-79W" firstAttribute="leading" secondItem="ToA-X2-vnT" secondAttribute="trailing" constant="10" id="fRC-60-g11"/>
                                                 <constraint firstItem="G4d-48-vah" firstAttribute="leading" secondItem="nwF-Sr-gTQ" secondAttribute="trailing" constant="10" id="iuA-fb-hJA"/>
                                                 <constraint firstItem="Lcx-rN-8J5" firstAttribute="centerX" secondItem="idm-mi-8of" secondAttribute="centerX" id="j05-TI-0Ka"/>

@@ -155,15 +155,25 @@ static NSString * const baseMLBURLString = @"https://www.baseball-reference.com/
     }   else{
         NSURL *firstGameURL = [NSURL URLWithString:[baseMLBURLString stringByAppendingString:firstGameURLString]];
         NSURL *secondGameURL = [NSURL URLWithString:[baseMLBURLString stringByAppendingString:firstGameURLString]];
-        return [self findMLBWinnerWithLink1:firstGameURL andLink2:secondGameURL andDate:bet.gameDate];
+        NSArray *gameURLs = [NSArray arrayWithObjects:firstGameURL, secondGameURL, nil];
+        return [self findMLBWinnerWithArrayLinks:gameURLs andDate:bet.gameDate];
     }
 }
 
--(NSString *) findMLBWinnerWithLink1:(NSURL * _Nonnull)url1 andLink2:(NSURL * _Nullable)url2 andDate:(NSDate * _Nonnull)gameDate  {
+-(NSString *) findMLBWinnerWithArrayLinks:(NSArray * _Nonnull)arr andDate:(NSDate * _Nonnull)gameDate  {
+    if (![[self findMLBWinnerWithLink:arr[1] andDate:gameDate] isEqualToString:@""]) {
+        return [self findMLBWinnerWithLink:arr[1] andDate:gameDate];
+    }   else if (![[self findMLBWinnerWithLink:arr[2] andDate:gameDate] isEqualToString:@""])   {
+        return [self findMLBWinnerWithLink:arr[2] andDate:gameDate];
+    }
+    return @"";
+}
+
+-(NSString *) findMLBWinnerWithLink:(NSURL * _Nonnull)url andDate:(NSDate * _Nonnull)gameDate  {
     //get the HTML String from the url link
     NSStringEncoding encoding;
     NSError *error;
-    NSString *gameHTMLString = [[NSString alloc] initWithContentsOfURL:url1
+    NSString *gameHTMLString = [[NSString alloc] initWithContentsOfURL:url
                                                      usedEncoding:&encoding
                                                             error:&error];
     
@@ -213,7 +223,7 @@ static NSString * const baseMLBURLString = @"https://www.baseball-reference.com/
         }
     }   else{
         //use the second game link if the first one is not the correct time
-        return [self findMLBWinnerWithLink1:url2 andLink2:url1 andDate:gameDate];
+        return @"";
     }
 }
 
@@ -240,6 +250,54 @@ static NSString * const baseMLBURLString = @"https://www.baseball-reference.com/
         scoreRange.location = 1;
         return [[text substringWithRange:scoreRange] intValue];
     } return score;
+}
+
+-(bool) didWinUFCBetWithBet:(Bet * _Nonnull)bet    {
+    NSString *baseUFCURLString = @"https://www.ufc.com/athlete/";
+    
+    __block NSString *headShotSourceString = @"";
+    [self fetchUFCPictureWithName:bet.betPick withCompletion:^(NSURL * _Nonnull url, NSError * _Nonnull error) {
+        if(url) {
+            headShotSourceString = url.absoluteString;
+        }   else{
+            headShotSourceString = nil;
+        }
+    }];
+    
+    if (headShotSourceString)   {
+        //make the website string out of the athlete name
+        NSString *endpoint = [bet.betPick stringByReplacingOccurrencesOfString:@" " withString:@"-"];
+        NSURL *fullURL = [NSURL URLWithString:[baseUFCURLString stringByAppendingString:endpoint]];
+        
+        //make an HTML string out of the url
+        NSString *athleteHTMLString = [NSString stringWithContentsOfURL:fullURL encoding:NSASCIIStringEncoding error:nil];
+        
+        HTMLDocument *document = [HTMLDocument documentWithString:athleteHTMLString];
+        HTMLElement *body = document.body;
+        
+        //finds the first instance of the combatants' headshots in the fighter's last match
+        HTMLElement *fighterAElement = [body querySelector:@"[class^='c-card-event--athlete-results__red-image']"];
+        HTMLElement *fighterAPictureElement = [fighterAElement querySelector:@"img"];
+        NSDictionary *fighterAattributes = fighterAPictureElement.attributes;
+        NSString *fighterAPictureSourceString = fighterAattributes[@"src"];
+        
+        //finds the other instance of the combatants' headshots in the fighter's last match
+        HTMLElement *fighterBElement = [body querySelector:@"[class^='c-card-event--athlete-results__blue-image']"];
+        HTMLElement *fighterBPictureElement = [fighterBElement querySelector:@"img"];
+        NSDictionary *fighterBattributes = fighterBPictureElement.attributes;
+        NSString *fighterBPictureSourceString = fighterBattributes[@"src"];
+        
+        //checks which htmlelement has the headshot that is the same as the fighters' headshot
+        HTMLElement *fighter = ([headShotSourceString isEqualToString:fighterAPictureSourceString])? fighterAElement: fighterBElement;
+        
+        //checks whether that headshot has the win plaque that is given to each winner
+        HTMLElement *winPlaque = [fighter querySelector:@"[class^='c-card-event--athlete-results__plaque win']"];
+        if (winPlaque)  {
+            return true;
+        }
+        return false;
+    }
+    return false;
 }
 
 @end

@@ -107,7 +107,12 @@
     Bet *bet = [[Bet alloc] init];
     bet = self.userBets[indexPath.row];
     
-    //check MLB events for whether they've been won 12 hours after they have occured
+    Bet *fakeBet = [[Bet alloc] init];
+    fakeBet.betPick = @"Dustin Poirier";
+    HTMLManager *htmlManager = [HTMLManager shared];
+    NSLog(@"%d", (int) [htmlManager didWinUFCBetWithBet:fakeBet]);
+        
+    //check MLB events for whether they've been won 12 hours after they have occured, UFC events for 72 hours after
     NSDate *now = [NSDate date];
     NSTimeInterval secondsBetween = [now timeIntervalSinceDate:bet.gameDate];
     int numberOfHours = secondsBetween / 3600;
@@ -123,9 +128,19 @@
         }
     }
     
+    if (numberOfHours >= 72 && bet.payout == -1.0 && [bet.sport isEqualToString:@"UFC"])    {
+        HTMLManager *htmlManager = [HTMLManager shared];
+        bool didWinBet = [htmlManager didWinUFCBetWithBet:bet];
+        if (didWinBet)  {
+            [bet wonBet];
+        }   else{
+            [bet lostBet];
+        }
+    }
+    
     //display the payout based on whether the user won the bet
     if (bet.payout > 0.0)   {
-        cell.payoutAmountLabel.text = [NSString stringWithFormat: @"%.2f", bet.payout];
+        cell.payoutAmountLabel.text = [@"$" stringByAppendingString:[NSString stringWithFormat:@"%.2f", bet.payout]];
         cell.payoutAmountLabel.textColor = [UIColor greenColor];
     }   else if (bet.payout == 0)   {
         cell.payoutAmountLabel.text = [@"$" stringByAppendingString:[NSString stringWithFormat:@"%.2f", bet.payout]];
