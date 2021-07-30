@@ -7,6 +7,7 @@
 
 #import "ParseManager.h"
 #import <Parse/Parse.h>
+#import "Bet.h"
 
 @implementation ParseManager
 
@@ -19,6 +20,7 @@
     return sharedManager;
 }
 
+//fetches all the bets the user has made
 -(void)fetchUserBetsWithCompletion:(void (^)(NSArray *betsPlaced, NSError *error))completion   {
     // construct query
     PFQuery *query = [PFQuery queryWithClassName:@"Bet"];
@@ -38,6 +40,28 @@
         }
     }];
 }
+
+
+-(void) fetchBet:(Bet * _Nonnull)bet withCompletion:(void (^)(PFObject *userBet, NSError *error))completion   {
+    // construct query for the bet
+    PFQuery *query = [PFQuery queryWithClassName:@"Bet"];
+    [query includeKey:@"author"];
+    [query includeKeys:[NSArray arrayWithObjects:@"author", @"gameDate", @"team2Image", @"team1Image", @"betPick", @"team1", @"team2", @"team1Odds", nil]];
+    [query includeKey:@"createdAt"];
+    [query whereKey:@"author" equalTo:[PFUser currentUser]];
+    [query whereKey:@"gameDate" equalTo:bet.gameDate];
+    [query whereKey:@"team1" equalTo:bet.team1];
+    [query whereKey:@"team2" equalTo:bet.team2];
+    [query orderByDescending:@"createdAt"];
+    
+    [query getFirstObjectInBackgroundWithBlock:^(PFObject * _Nullable object, NSError * _Nullable error) {
+        if (object) {
+            completion(object, nil);
+        }   else{
+            completion(nil, error);
+        }}];
+}
+
 
 
 

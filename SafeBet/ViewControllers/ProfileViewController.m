@@ -14,6 +14,7 @@
 #import "UIImageView+AFNetworking.h"
 #import "MakePickViewController.h"
 #import "HTMLManager.h"
+#import "ParseManager.h"
 
 @interface ProfileViewController () <UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -67,19 +68,12 @@
 
 - (void) fetchBets  {
     // construct query
-    PFQuery *query = [PFQuery queryWithClassName:@"Bet"];
-    [query includeKey:@"author"];
-    [query includeKeys:[NSArray arrayWithObjects:@"author", @"gameDate", @"team2Image", @"team1Image", @"betPick", @"team1", @"team2", @"team1Odds", nil]];
-    [query includeKey:@"createdAt"];
-    [query whereKey:@"author" equalTo:[PFUser currentUser]];
-    [query orderByDescending:@"createdAt"];
-
-    // fetch data asynchronously
-    [query findObjectsInBackgroundWithBlock:^(NSArray *bets, NSError *error) {
-        if (bets != nil) {
-            self.userBets = bets;
+    ParseManager *parseManager = [ParseManager shared];
+    [parseManager fetchUserBetsWithCompletion:^(NSArray * _Nonnull betsPlaced, NSError * _Nonnull error) {
+        if (betsPlaced) {
+            self.userBets = betsPlaced;
             [self.tableView reloadData];
-        } else {
+        }   else{
             NSLog(@"%@", error.localizedDescription);
         }
     }];
@@ -106,18 +100,13 @@
     //initialize bet and set it to each array index
     Bet *bet = [[Bet alloc] init];
     bet = self.userBets[indexPath.row];
-    
-    Bet *fakeBet = [[Bet alloc] init];
-    fakeBet.betPick = @"Dustin Poirier";
-    HTMLManager *htmlManager = [HTMLManager shared];
-    NSLog(@"%d", (int) [htmlManager didWinUFCBetWithBet:fakeBet]);
         
     //check MLB events for whether they've been won 12 hours after they have occured, UFC events for 72 hours after
     NSDate *now = [NSDate date];
     NSTimeInterval secondsBetween = [now timeIntervalSinceDate:bet.gameDate];
     int numberOfHours = secondsBetween / 3600;
-    
-    //check for sports that haven't been checked yet
+        
+    //check for MLB results that haven't been checked yet
     if (numberOfHours >= 12  && bet.payout == -1.0 && [bet.sport isEqualToString:@"MLB"])    {
         HTMLManager *htmlManager = [HTMLManager shared];
         bool didWinBet = [htmlManager didWinMLBBet:bet];
@@ -128,6 +117,7 @@
         }
     }
     
+    //check for UFC fight results that haven't been checked yet
     if (numberOfHours >= 72 && bet.payout == -1.0 && [bet.sport isEqualToString:@"UFC"])    {
         HTMLManager *htmlManager = [HTMLManager shared];
         bool didWinBet = [htmlManager didWinUFCBetWithBet:bet];

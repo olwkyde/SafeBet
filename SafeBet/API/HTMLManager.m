@@ -77,15 +77,11 @@ static NSString * const baseMLBURLString = @"https://www.baseball-reference.com/
     
     //making a URL by concatening the integers with strings
     NSString *fullURLString = [@"https://www.baseball-reference.com/boxes/?month=" stringByAppendingFormat:@"%d%@%d%@%d", gameMonth, @"&day=", gameDay, @"&year=", gameYear];
-    NSLog(@"%@", fullURLString);
     NSURL *mlbURL = [NSURL URLWithString:fullURLString];
     
     //creating an HTML file out of the URL
     NSStringEncoding encoding;
     NSError *error;
-    NSString *webData = [[NSString alloc] initWithContentsOfURL:mlbURL
-                                                     usedEncoding:&encoding
-                                                            error:&error];
     NSString *mlbDatabaseHTML= [NSString stringWithContentsOfURL:mlbURL encoding:NSASCIIStringEncoding error:nil];
     
     
@@ -283,10 +279,7 @@ static NSString * const baseMLBURLString = @"https://www.baseball-reference.com/
         
         //finds the other instance of the combatants' headshots in the fighter's last match
         HTMLElement *fighterBElement = [body querySelector:@"[class^='c-card-event--athlete-results__blue-image']"];
-        HTMLElement *fighterBPictureElement = [fighterBElement querySelector:@"img"];
-        NSDictionary *fighterBattributes = fighterBPictureElement.attributes;
-        NSString *fighterBPictureSourceString = fighterBattributes[@"src"];
-        
+
         //checks which htmlelement has the headshot that is the same as the fighters' headshot
         HTMLElement *fighter = ([headShotSourceString isEqualToString:fighterAPictureSourceString])? fighterAElement: fighterBElement;
         

@@ -129,14 +129,14 @@
                 }
             }
         }
-        //counts whether there are at least 5 events returned by the array, if so, take the last 5, if not, take all
-        int upcomingEventCount = (upcomingEvent.count >= 5) ? 5 : upcomingEvent.count;
+        //counts whether there are at least 5 events returned by the array, if so, make an array of the last 5 elements, if not, make an array of all the elements
+        int upcomingEventCount = (((int) upcomingEvent.count) >= 5) ? 5 : (int) upcomingEvent.count;
         NSRange rangeThisWeek = NSMakeRange(upcomingEvent.count - upcomingEventCount, (upcomingEventCount - 1));
     
         NSArray *upComingEventMainCard = [upcomingEvent subarrayWithRange:rangeThisWeek];
         
-    
-        int nextWeekEventsCount = (eventNextWeek.count >= 5) ? 5 : eventNextWeek.count;
+    //counts whether there are at least 5 events returned by the array, if so, make an array of the last 5 elements, if not, make an array of all the elements
+        int nextWeekEventsCount = (((int) eventNextWeek.count )>= 5) ? 5 : (int) eventNextWeek.count;
         NSRange rangeNextWeek = NSMakeRange(eventNextWeek.count - nextWeekEventsCount, (nextWeekEventsCount - 1));
         NSArray *nextWeekEventMainCard = [eventNextWeek subarrayWithRange:rangeNextWeek];
     

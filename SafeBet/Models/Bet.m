@@ -8,9 +8,12 @@
 #import "Bet.h"
 #import <Parse/Parse.h>
 #import "ProfileViewController.h"
+#import "ParseManager.h"
 
 
 @implementation Bet
+
+
 
 + (nonnull NSString *)parseClassName {
     return @"Bet";
@@ -49,32 +52,22 @@
     if (pickOdds >= 0)  {
         payout = ((pickOdds + 100.) * self.betAmount) / 100;
     }   else{
-        payout = ((100) * self.betAmount / pickOdds) + self.betAmount;
+        payout = ((100) * self.betAmount / abs(pickOdds)) + self.betAmount;
     }
     return payout;
 }
 
 //deletes a bet
 - (void) deleteBet  {
-    // construct query for the old bet
-    PFQuery *query = [PFQuery queryWithClassName:@"Bet"];
-    [query includeKey:@"author"];
-    [query includeKeys:[NSArray arrayWithObjects:@"author", @"gameDate", @"team2Image", @"team1Image", @"betPick", @"team1", @"team2", @"team1Odds", nil]];
-    [query includeKey:@"createdAt"];
-    [query whereKey:@"author" equalTo:[PFUser currentUser]];
-    [query whereKey:@"gameDate" equalTo:self.gameDate];
-    [query whereKey:@"team1" equalTo:self.team1];
-    [query whereKey:@"team2" equalTo:self.team2];
-    [query orderByDescending:@"createdAt"];
-
-    // delete row asynchronously, deletes a bet from bet made
-    [query getFirstObjectInBackgroundWithBlock:^(PFObject * _Nullable object, NSError * _Nullable error) {
-        if (object) {
+    //fetches bet
+    ParseManager *parseManager = [ParseManager shared];
+    [parseManager fetchBet:self withCompletion:^(PFObject * _Nonnull userBet, NSError * _Nonnull error) {
+        if (userBet)    {
             //give the money back for the old bet
             int betsMade = [[PFUser.currentUser objectForKey:@"betsMade"] intValue];
             [PFUser.currentUser setValue: [NSNumber numberWithInt:(betsMade - 1)] forKey:@"betsMade"];
             NSLog(@"%d", betsMade);
-            [object deleteInBackground];
+            [userBet deleteInBackground];
         } else {
             NSLog(@"%@", error.localizedDescription);
         }
@@ -82,19 +75,9 @@
 }
 
 -(void) lostBet {
-    // construct query for the bet
-    PFQuery *query = [PFQuery queryWithClassName:@"Bet"];
-    [query includeKey:@"author"];
-    [query includeKeys:[NSArray arrayWithObjects:@"author", @"gameDate", @"team2Image", @"team1Image", @"betPick", @"team1", @"team2", @"team1Odds", nil]];
-    [query includeKey:@"createdAt"];
-    [query whereKey:@"author" equalTo:[PFUser currentUser]];
-    [query whereKey:@"gameDate" equalTo:self.gameDate];
-    [query whereKey:@"team1" equalTo:self.team1];
-    [query whereKey:@"team2" equalTo:self.team2];
-    [query orderByDescending:@"createdAt"];
-    
-    [query getFirstObjectInBackgroundWithBlock:^(PFObject * _Nullable object, NSError * _Nullable error) {
-        if (object) {
+    ParseManager *parseManager = [ParseManager shared];
+    [parseManager fetchBet:self withCompletion:^(PFObject * _Nonnull userBet, NSError * _Nonnull error) {
+        if (userBet)    {
             self.didWinBet = false;
             self.payout = 0.0;
         }
@@ -102,32 +85,22 @@
 }
 
 -(void) wonBet{
-    // construct query for the bet
-    PFQuery *query = [PFQuery queryWithClassName:@"Bet"];
-    [query includeKey:@"author"];
-    [query includeKeys:[NSArray arrayWithObjects:@"author", @"gameDate", @"team2Image", @"team1Image", @"betPick", @"team1", @"team2", @"team1Odds", nil]];
-    [query includeKey:@"createdAt"];
-    [query whereKey:@"author" equalTo:[PFUser currentUser]];
-    [query whereKey:@"gameDate" equalTo:self.gameDate];
-    [query whereKey:@"team1" equalTo:self.team1];
-    [query whereKey:@"team2" equalTo:self.team2];
-    [query orderByDescending:@"createdAt"];
-    
-    [query getFirstObjectInBackgroundWithBlock:^(PFObject * _Nullable object, NSError * _Nullable error) {
-        if (object) {
+    ParseManager *parseManager = [ParseManager shared];
+    [parseManager fetchBet:self withCompletion:^(PFObject * _Nonnull userBet, NSError * _Nonnull error) {
+        if (userBet)    {
             //set payout to the possible payout and set didWin to true
             self.didWinBet = true;
             self.payout = self.payoutPossible;
             
             PFUser *user = [PFUser currentUser];
             int betsWon = [[PFUser.currentUser objectForKey:@"betsWon"] intValue];
-            object[@"payout"] = [NSNumber numberWithDouble:self.payout];
+            userBet[@"payout"] = [NSNumber numberWithDouble:self.payout];
             user[@"betsWon"] = [NSNumber numberWithInt:(betsWon + 1)];
             
             double bank = [[PFUser.currentUser objectForKey:@"bank"] intValue];
             user[@"bank"] = [NSNumber numberWithDouble:(bank + self.payout)];
             
-            [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+            [userBet saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
                 if (error != nil)  {
                     NSLog(@"%@", [error localizedDescription]);
                 }
@@ -140,9 +113,6 @@
         }
     }];
 }
-
-
-
 
 //creates a PFFileObject out of a UIImage
 + (PFFileObject *)getPFFileFromImage: (UIImage * _Nullable)image {

@@ -16,6 +16,7 @@
 #import "Bet.h"
 #import "BetCell.h"
 #import "UIImageView+AFNetworking.h"
+#import "ParseManager.h"
 
 @interface HomeFeedViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *logOutButton;
@@ -102,21 +103,12 @@
 //fetches user Bets from the Parse Database to cross-reference with the events displayed on the TableView
 - (void) fetchUserBets  {
     // construct query
-    PFQuery *query = [PFQuery queryWithClassName:@"Bet"];
-    [query includeKey:@"author"];
-    [query includeKeys:[NSArray arrayWithObjects:@"author", @"gameDate", @"team2Image", @"team1Image", @"betPick", @"team1", @"team2", @"team1Odds", nil]];
-    [query includeKey:@"createdAt"];
-    if ([PFUser currentUser] != nil)    {
-        [query whereKey:@"author" equalTo:[PFUser currentUser]];
-    }
-    [query orderByDescending:@"createdAt"];
-
-    // fetch data asynchronously
-    [query findObjectsInBackgroundWithBlock:^(NSArray *bets, NSError *error) {
-        if (bets != nil) {
-            self.userBets = bets;
+    ParseManager *parseManager = [ParseManager shared];
+    [parseManager fetchUserBetsWithCompletion:^(NSArray * _Nonnull betsPlaced, NSError * _Nonnull error) {
+        if (betsPlaced) {
+            self.userBets = betsPlaced;
             [self.tableView reloadData];
-        } else {
+        }   else{
             NSLog(@"%@", error.localizedDescription);
         }
     }];
