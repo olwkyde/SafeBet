@@ -18,7 +18,7 @@
 #import "UIImageView+AFNetworking.h"
 #import "ParseManager.h"
 
-@interface HomeFeedViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface HomeFeedViewController () <UITableViewDelegate, UITableViewDataSource, MakePickControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *logOutButton;
 @property (strong, nonatomic) NSMutableArray *ufcEventsArray;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -37,7 +37,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(onTimer) userInfo:nil repeats:true];
+//    [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(onTimer) userInfo:nil repeats:true];
+    [self fetchUserBets];
     self.data = [NSMutableArray arrayWithCapacity:2];
     [self setUpViews];
     
@@ -244,6 +245,10 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     return self.leagueNames[section];
+}
+
+- (void)madeBet:(Bet * _Nonnull) bet    {
+    [self fetchUserBets];
 }
 
 @end

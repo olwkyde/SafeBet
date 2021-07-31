@@ -167,11 +167,7 @@ static NSString * const baseMLBURLString = @"https://www.baseball-reference.com/
 
 -(NSString *) findMLBWinnerWithLink:(NSURL * _Nonnull)url andDate:(NSDate * _Nonnull)gameDate  {
     //get the HTML String from the url link
-    NSStringEncoding encoding;
-    NSError *error;
-    NSString *gameHTMLString = [[NSString alloc] initWithContentsOfURL:url
-                                                     usedEncoding:&encoding
-                                                            error:&error];
+    NSString *gameHTMLString = [NSString stringWithContentsOfURL:url encoding:NSASCIIStringEncoding error:nil];
     
     //parse the HTML for the time of the game
     HTMLDocument *document = [HTMLDocument documentWithString:gameHTMLString];

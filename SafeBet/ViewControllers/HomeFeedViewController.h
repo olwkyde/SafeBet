@@ -6,10 +6,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MakePickViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface HomeFeedViewController : UIViewController
+@interface HomeFeedViewController : UIViewController <MakePickControllerDelegate>
 
 @end
 

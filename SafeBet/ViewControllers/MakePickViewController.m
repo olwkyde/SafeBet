@@ -190,6 +190,7 @@
         //post the Bet
         [Bet postBetWithEvent:self.event withBetAmount:self.betAmountInt withBetPick:teamSelected withCompletion:nil];
         
+        [self.delegate madeBet:bet];
         [self.navigationController popViewControllerAnimated:YES];
     }];
 }

@@ -119,7 +119,7 @@
             NSTimeInterval secondsBetween = [eventDate timeIntervalSinceDate:now];
             int numberOfDays = secondsBetween / 86400;
             
-            if (numberOfDays <= 13) {
+            if (numberOfDays <= 13 && (round(secondsBetween) >= 0)) {
                 Events *event = [[Events alloc] initWithDictionary:dictionary];
                 if (numberOfDays <= 6)  {
                     [upcomingEvent addObject:event];

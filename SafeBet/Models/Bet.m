@@ -13,7 +13,23 @@
 
 @implementation Bet
 
-
+@dynamic postID;
+@dynamic userID;
+@dynamic author;
+@dynamic team1;
+@dynamic team2;
+@dynamic gameDate;
+@dynamic date;
+@dynamic team1Odds;
+@dynamic team2Odds;
+@dynamic team1image;
+@dynamic team2image;
+@dynamic betAmount;
+@dynamic didWinBet;
+@dynamic betPick;
+@dynamic payout;
+@dynamic sport;
+@dynamic payoutPossible;
 
 + (nonnull NSString *)parseClassName {
     return @"Bet";

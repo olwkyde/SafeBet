@@ -9,6 +9,10 @@
 #import "Events.h"
 #import "Bet.h"
 
+@protocol MakePickControllerDelegate
+- (void)madeBet:(Bet * _Nonnull) bet;
+@end
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MakePickViewController : UIViewController 
@@ -32,6 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) double payoutInt;
 @property (strong, nonatomic) Events *event;
 @property (strong, nonatomic) Bet *bet;
+@property (nonatomic, weak) id <MakePickControllerDelegate> delegate;
 
 @end
 
