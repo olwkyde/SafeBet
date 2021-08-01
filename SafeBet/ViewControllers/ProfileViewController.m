@@ -16,7 +16,7 @@
 #import "HTMLManager.h"
 #import "ParseManager.h"
 
-@interface ProfileViewController () <UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface ProfileViewController () <UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, MakePickControllerDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) NSArray *userBets;
 @property (nonatomic, strong) UIRefreshControl *viewRefreshControl;
@@ -25,7 +25,7 @@
 
 @end
 
-@implementation ProfileViewController
+@implementation ProfileViewController 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -90,6 +90,7 @@
         Bet *bet = self.userBets[indexPath.row];
         
         MakePickViewController *makePickViewController = [segue destinationViewController];
+        makePickViewController.delegate = self;
         makePickViewController.bet = bet;
     }
 }
@@ -300,5 +301,11 @@
     
     return event;
 }
+
+- (void)madeBet:(Bet * _Nonnull)bet {
+    [self setUpViews];
+    [self fetchBets];
+}
+
 
 @end

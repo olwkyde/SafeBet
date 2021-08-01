@@ -37,7 +37,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-//    [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(onTimer) userInfo:nil repeats:true];
     [self fetchUserBets];
     self.data = [NSMutableArray arrayWithCapacity:2];
     [self setUpViews];
@@ -52,11 +51,6 @@
     
     [self fetchMLBEvents];
     [self fetchUFCEvents];
-}
-
-//code to be run every 10 seconds
-- (void)onTimer {
-    [self fetchUserBets];
 }
 
 //setting up intial settings for title view
@@ -145,6 +139,7 @@
         Events *event = self.data[indexPath.section][indexPath.row];
         
         MakePickViewController *makePickViewController = [segue destinationViewController];
+        makePickViewController.delegate = self;
         makePickViewController.event = event;
         makePickViewController.warningLabel.alpha = 0;
     }   else{
@@ -209,8 +204,11 @@
 
         betCell.team1Label.text = bet.team1;
         betCell.team2Label.text = bet.team2;
-        betCell.team1OddsLabel.text = [self configureOdds:bet.team1Odds];
-        betCell.team2OddsLabel.text = [self configureOdds:bet.team2Odds];
+        NSString *team1OddsString = [self configureOdds:bet.team1Odds];
+        NSString *team2OddsString = [self configureOdds:bet.team2Odds];
+        
+        betCell.team1OddsLabel.text = [team1OddsString substringFromIndex:([team1OddsString length] - 4)];
+        betCell.team2OddsLabel.text = [team2OddsString substringFromIndex:([team2OddsString length] - 4)];
 
         if ([bet.betPick isEqualToString:bet.team1])    {
             [betCell.teamPickedImageView setImageWithURL:team1ImageURL];
@@ -249,6 +247,7 @@
 
 - (void)madeBet:(Bet * _Nonnull) bet    {
     [self fetchUserBets];
+    [self.tableView reloadData];
 }
 
 @end

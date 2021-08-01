@@ -80,10 +80,20 @@
     [parseManager fetchBet:self withCompletion:^(PFObject * _Nonnull userBet, NSError * _Nonnull error) {
         if (userBet)    {
             //give the money back for the old bet
+            PFUser *user = [PFUser currentUser];
             int betsMade = [[PFUser.currentUser objectForKey:@"betsMade"] intValue];
-            [PFUser.currentUser setValue: [NSNumber numberWithInt:(betsMade - 1)] forKey:@"betsMade"];
-            NSLog(@"%d", betsMade);
+            double userBank = [[PFUser.currentUser objectForKey:@"bank"] doubleValue];
+            user[@"betsMade"] = [NSNumber numberWithInt:(betsMade - 1)];
+            user[@"bank"] = [NSNumber numberWithDouble:(userBank + self.betAmount)];
+//            [PFUser.currentUser setValue: [NSNumber numberWithInt:(betsMade - 1)] forKey:@"betsMade"];
+//            NSLog(@"%d", betsMade);
             [userBet deleteInBackground];
+            [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+                if (error != nil)  {
+                    NSLog(@"%@", [error localizedDescription]);
+                }
+            }];
+            
         } else {
             NSLog(@"%@", error.localizedDescription);
         }

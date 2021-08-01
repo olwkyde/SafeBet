@@ -167,14 +167,16 @@
         
         self.bankAmountLabel.textColor = [UIColor whiteColor];
         
-        //update the bank label (if it hasn't already been done)
-        if (self.bet == nil)    {self.bankAmountLabel.text = [@"Bank: $" stringByAppendingString:[NSString stringWithFormat:@"%.2f", (self.bankAmount - self.betAmountInt)]];}
-        
         //update the bank Amount
         self.bankAmount = [[PFUser.currentUser valueForKey:@"bank"] doubleValue];
         
         //set the new bank amount in Parse
-        [PFUser.currentUser setValue:[NSNumber numberWithDouble:(self.bankAmount - self.betAmountInt + self.bet.betAmount)] forKey:@"bank"];
+        [PFUser.currentUser setValue:[NSNumber numberWithDouble:(self.bankAmount - self.betAmountInt)] forKey:@"bank"];
+        
+        //update the bank label (if it hasn't already been done)
+        if (self.bet == nil)   {
+            self.bankAmountLabel.text = [@"Bank: $" stringByAppendingString:[NSString stringWithFormat:@"%.2f", (self.bankAmount - self.betAmountInt)]];
+        }
         
         //increment number of bets made
         int betsMade = ([[PFUser.currentUser objectForKey:@"betsMade"] intValue]) + 1;
@@ -188,9 +190,12 @@
         }
         
         //post the Bet
-        [Bet postBetWithEvent:self.event withBetAmount:self.betAmountInt withBetPick:teamSelected withCompletion:nil];
+        [Bet postBetWithEvent:self.event withBetAmount:self.betAmountInt withBetPick:teamSelected withCompletion:^(BOOL succeeded, NSError * _Nullable error)    {
+            if (succeeded)  {
+                [self.delegate madeBet:bet];
+            }
+        }];
         
-        [self.delegate madeBet:bet];
         [self.navigationController popViewControllerAnimated:YES];
     }];
 }
