@@ -178,7 +178,6 @@
                                                 </label>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Webp.net-resizeimage" translatesAutoresizingMaskIntoConstraints="NO" id="rP7-hQ-wHs">
                                                     <rect key="frame" x="20" y="20" width="25" height="25"/>
-                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="25" id="TsP-hR-niY"/>
                                                         <constraint firstAttribute="height" constant="25" id="V8l-0N-dkX"/>
@@ -186,7 +185,6 @@
                                                 </imageView>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Webp.net-resizeimage" translatesAutoresizingMaskIntoConstraints="NO" id="JQb-Mh-tkj">
                                                     <rect key="frame" x="20" y="78" width="25" height="25"/>
-                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="25" id="206-gB-dO6"/>
                                                         <constraint firstAttribute="height" constant="25" id="th8-zn-vrf"/>
@@ -276,7 +274,6 @@
                                                 </label>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="IUO-iK-cux">
                                                     <rect key="frame" x="20" y="20" width="25" height="25"/>
-                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="25" id="nLm-pE-GED"/>
                                                         <constraint firstAttribute="width" constant="25" id="wUb-Xj-r6N"/>
@@ -284,7 +281,6 @@
                                                 </imageView>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hrk-TF-wLW">
                                                     <rect key="frame" x="20" y="78" width="25" height="25"/>
-                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="25" id="dK3-wH-RKl"/>
                                                         <constraint firstAttribute="width" constant="25" id="gYj-jV-mkN"/>
@@ -379,7 +375,7 @@
                             <constraint firstItem="ERi-kj-49r" firstAttribute="leading" secondItem="rL9-OR-h5b" secondAttribute="leading" id="aTp-Rh-IvT"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Upcoming Events" image="Webp.net-resizeimage (1)" id="qWy-tm-ZOd"/>
+                    <tabBarItem key="tabBarItem" title="Upcoming Events" image="Webp.net-resizeimage (1)" selectedImage="Webp.net-resizeimage-1" id="qWy-tm-ZOd"/>
                     <navigationItem key="navigationItem" title="Home" id="aP2-dy-vhR">
                         <barButtonItem key="leftBarButtonItem" title="Log Out" id="nRy-NL-d5H">
                             <connections>
@@ -519,7 +515,6 @@
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sat-dW-bb2">
                                 <rect key="frame" x="70" y="136" width="45" height="45"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="45" id="awo-SD-ZBU"/>
                                     <constraint firstAttribute="height" constant="45" id="reI-Fs-XPp"/>
@@ -530,7 +525,6 @@
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GNh-Xp-ZSA">
                                 <rect key="frame" x="275" y="136" width="45" height="45"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="45" id="EGH-JM-3bo"/>
                                     <constraint firstAttribute="height" constant="45" id="RpN-4U-oK1"/>
@@ -663,9 +657,6 @@
                                     <constraint firstAttribute="width" constant="50" id="WpT-5M-GzG"/>
                                     <constraint firstAttribute="height" constant="50" id="rOe-Ca-UwE"/>
                                 </constraints>
-                                <connections>
-                                    <outletCollection property="gestureRecognizers" destination="BZC-PE-sMT" appends="YES" id="TJd-TE-Roz"/>
-                                </connections>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="username" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ntP-Fg-19j">
                                 <rect key="frame" x="70" y="24.666666666666671" width="76" height="21"/>
@@ -787,7 +778,6 @@
                                                 </label>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="nwF-Sr-gTQ">
                                                     <rect key="frame" x="20" y="20" width="25" height="25"/>
-                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="25" id="Rf6-Su-alI"/>
                                                         <constraint firstAttribute="width" constant="25" id="mwx-98-Ugq"/>
@@ -795,7 +785,6 @@
                                                 </imageView>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ToA-X2-vnT">
                                                     <rect key="frame" x="20" y="78" width="25" height="25"/>
-                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="25" id="3GR-LF-g6g"/>
                                                         <constraint firstAttribute="width" constant="25" id="58j-uZ-DGU"/>
@@ -932,7 +921,7 @@
                             <constraint firstItem="XgS-so-sk2" firstAttribute="bottom" secondItem="fHn-bN-D9r" secondAttribute="bottom" id="zpD-d8-efn"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Profile" image="Webp.net-resizeimage" id="6yt-Gi-Uwi"/>
+                    <tabBarItem key="tabBarItem" title="Profile" image="Webp.net-resizeimage-2" id="6yt-Gi-Uwi"/>
                     <navigationItem key="navigationItem" id="AbS-1U-aW1"/>
                     <connections>
                         <outlet property="bankLabel" destination="E5l-0T-N1p" id="UgN-tJ-VPD"/>
@@ -1070,7 +1059,7 @@
         <scene sceneID="anP-1E-ESk">
             <objects>
                 <navigationController storyboardIdentifier="HomeFeedViewController" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="1R3-2e-IwY" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Upcoming Events" image="Webp.net-resizeimage (1)" id="f1m-D5-1Vu"/>
+                    <tabBarItem key="tabBarItem" title="Upcoming Events" image="Webp.net-resizeimage-1" selectedImage="Webp.net-resizeimage (1)" id="f1m-D5-1Vu"/>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="ulP-Vz-Az1"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="eZF-kC-WDg">
@@ -1093,6 +1082,8 @@
     <resources>
         <image name="Webp.net-resizeimage" width="25" height="25"/>
         <image name="Webp.net-resizeimage (1)" width="25" height="25"/>
+        <image name="Webp.net-resizeimage-1" width="25" height="26"/>
+        <image name="Webp.net-resizeimage-2" width="25" height="25"/>
         <image name="companyName" width="306" height="162"/>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

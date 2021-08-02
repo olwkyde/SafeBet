@@ -55,6 +55,11 @@
     [self fetchUFCEvents];
 }
 
+- (void)viewDidAppear:(BOOL)animated    {
+    [self fetchUserBets];
+    [self.tableView reloadData];
+}
+
 //setting up intial settings for title view
 - (void)setUpViews  {
     UIImage *titleImage = [UIImage imageNamed:@"logoResized"];
@@ -180,7 +185,7 @@
 //configures odds so that underdogs get the '+' symbol in front of the odds (an underdog can have +100 odds)
 - (NSString *) configureOdds: (nonnull int *) odd{
     NSString *oddString = [NSString stringWithFormat:@"%d", odd];
-    if ((([oddString characterAtIndex:0] == 45) || ([oddString characterAtIndex:0] == 43 && [oddString intValue] != 0))) {
+    if ((([oddString characterAtIndex:0] == 45) || ([oddString characterAtIndex:0] == 43))) {
         return oddString;
     }   else if ([oddString isEqualToString:@"100"])    {
         return @"+100";
@@ -205,32 +210,31 @@
     //checking if bet exists for the event
     bet = [self betExitsForEvent:event];
     if (bet != nil) {
-        betCell.betAmountLabel.text = [NSString stringWithFormat:@"%.2f", bet.betAmount];
+        betCell.betAmountLabel.text = [@"$" stringByAppendingString:[NSString stringWithFormat:@"%.2f", bet.betAmount]];
 
         betCell.dayLabel.text = event.date;
         betCell.timeLabel.text = event.time;
+        
+        if ([bet.sport isEqualToString:@"MLB"] ) {
+            betCell.team1ImageView.image = [UIImage imageNamed:bet.team1];
+            betCell.team2ImageView.image = [UIImage imageNamed:bet.team2];
+        }   else    {
+            betCell.team1ImageView.image = event.team1Image.image;
+            betCell.team2ImageView.image = event.team2Image.image;
+        }
 
-        PFFileObject *team1ImageFile = bet.team1image;
-        NSURL *team1ImageURL = [NSURL URLWithString:team1ImageFile.url];
-        [betCell.team1ImageView setImageWithURL:team1ImageURL];
-
-        PFFileObject *team2ImageFile = bet.team2image;
-        NSURL *team2ImageURL = [NSURL URLWithString:team2ImageFile.url];
-        [betCell.team2ImageView setImageWithURL:team2ImageURL];
 
         betCell.team1Label.text = bet.team1;
         betCell.team2Label.text = bet.team2;
-        NSString *team1OddsString = [self configureOdds:bet.team1Odds];
-        NSString *team2OddsString = [self configureOdds:bet.team2Odds];
-        
-        betCell.team1OddsLabel.text = [team1OddsString substringFromIndex:([team1OddsString length] - 4)];
-        betCell.team2OddsLabel.text = [team2OddsString substringFromIndex:([team2OddsString length] - 4)];
-
+        NSString *team1OddsString = [self configureOdds:event.team1Odds];
+        NSString *team2OddsString = [self configureOdds:event.team2Odds];
+        betCell.team1OddsLabel.text = team1OddsString;
+        betCell.team2OddsLabel.text = team2OddsString;
 
         if ([bet.betPick isEqualToString:bet.team1])    {
-            [betCell.teamPickedImageView setImageWithURL:team1ImageURL];
+            betCell.teamPickedImageView.image = betCell.team1ImageView.image;
         }   else {
-            [betCell.teamPickedImageView setImageWithURL:team2ImageURL];
+            betCell.teamPickedImageView.image = betCell.team2ImageView.image;
         }
         
         return betCell;
@@ -239,8 +243,6 @@
         eventCell.team2ImageView.image = event.team2Image.image;
         eventCell.team1OddsLabel.text = [NSString stringWithFormat:@"%+d", event.team1Odds];
         eventCell.team2OddsLabel.text = [NSString stringWithFormat:@"%+d", event.team2Odds];
-//        eventCell.team1Oddslabel.text = [self configureOdds:event.team1Odds];
-//        eventCell.team2OddsLabel.text = [self configureOdds:event.team2Odds];
         eventCell.event = event;
         eventCell.dayLabel.text = event.date;
         eventCell.timeLabel.text = event.time;

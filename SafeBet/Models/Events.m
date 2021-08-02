@@ -58,7 +58,10 @@
         if (gameHour > 12) {
             gameHour = gameHour - 12;
             self.time = [NSString stringWithFormat:@"%d%@%02d%@", gameHour, @":", gameMinute, pm];
-        }   else{
+        }   else if (gameHour == 0)    {
+            self.time = [NSString stringWithFormat:@"%d%@%02d%@", 12, @":", gameMinute, am];
+        }
+            else{
             self.time = [NSString stringWithFormat:@"%d%@%d%@", gameHour, @":", gameMinute, am];
         }
         
@@ -83,7 +86,16 @@
                 }   else{
                     NSData *team1ImageData = [[NSData alloc] initWithContentsOfURL:url];
                     UIImage *team1Image = [UIImage imageWithData:team1ImageData];
-                    self.team1Image = [[UIImageView alloc] initWithImage:team1Image];
+                    
+                    //cropping it to a square in the middle
+                    double halfWidth = team1Image.size.height / 2;
+                    double middleX = team1Image.size.width / 2;
+                    double height = team1Image.size.height;
+                    CGRect croppedArea = CGRectMake(middleX - halfWidth, 0, height, height);
+                    CGImageRef imageRef = CGImageCreateWithImageInRect([team1Image CGImage], croppedArea);
+                    UIImage *cropped = [UIImage imageWithCGImage:imageRef];
+                    CGImageRelease(imageRef);
+                    self.team1Image = [[UIImageView alloc] initWithImage:cropped];
                     
                 }
             }];
@@ -93,7 +105,16 @@
                 }   else{
                     NSData *team2ImageData = [[NSData alloc] initWithContentsOfURL:url];
                     UIImage *team2Image = [UIImage imageWithData:team2ImageData];
-                    self.team2Image = [[UIImageView alloc] initWithImage:team2Image];
+                    
+                    //cropping it to a square in the middle
+                    double halfWidth = team2Image.size.height / 2;
+                    double middleX = team2Image.size.width / 2;
+                    double height = team2Image.size.height;
+                    CGRect croppedArea = CGRectMake(middleX - halfWidth, 0, height, height);
+                    CGImageRef imageRef = CGImageCreateWithImageInRect([team2Image CGImage], croppedArea);
+                    UIImage *cropped = [UIImage imageWithCGImage:imageRef];
+                    CGImageRelease(imageRef);
+                    self.team2Image = [[UIImageView alloc] initWithImage:cropped];
                 }
             }];
         }

@@ -25,7 +25,7 @@ static NSString * const baseMLBURLString = @"https://www.baseball-reference.com/
 
 -(void) fetchUFCPictureWithName:(nonnull NSString *)fighterName withCompletion:(void (^)(NSURL *url, NSError *error))completion   {
     //making the url endpoint out of the fighter name
-    NSString *endpoint = [fighterName stringByReplacingOccurrencesOfString:@" " withString:@"-"];
+    NSString *endpoint = [[[fighterName stringByReplacingOccurrencesOfString:@" " withString:@"-"] stringByReplacingOccurrencesOfString:@"é" withString:@"e"] stringByReplacingOccurrencesOfString:@"ñ" withString:@"n"];
     NSString *fullURLString = [@"https://www.ufc.com/athlete/" stringByAppendingString:endpoint];
     
     //make the HTML string from the URL

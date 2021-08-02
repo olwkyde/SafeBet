@@ -121,7 +121,7 @@
         if (self.bet != nil)   {
             UIAlertController *warning = [UIAlertController alertControllerWithTitle:@"Warning"  message:@"" preferredStyle:(UIAlertControllerStyleAlert)];
             NSString *pickOddsString = ([self.bet.betPick isEqualToString:self.bet.team1])? [self configureOdds:self.bet.team1Odds]: [self configureOdds:self.bet.team2Odds];
-            [warning setMessage:[@"Would you like to edit pick of " stringByAppendingFormat:@"%@ %@ %@ %@ %.2f %@", self.bet.betPick, @" @ ", pickOddsString, @"for $", self.bet.betAmount, @"?"]];
+            [warning setMessage:[@"Would you like to edit pick of " stringByAppendingFormat:@"%@ %@ %@ %@ %.2f %@", self.bet.betPick, @" @", pickOddsString, @"for $", self.bet.betAmount, @"?"]];
             UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 }];
             //add the cancel action to the alert

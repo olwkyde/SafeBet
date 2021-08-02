@@ -36,6 +36,7 @@
     [self setUpViews];
     [self fetchBets];
     UITapGestureRecognizer *profileImageTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(profileImageTapped)];
+    [self.profileImageView addGestureRecognizer:profileImageTapGesture];
 //    [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(onTimer) userInfo:nil repeats:true];
     [self.profileImageView setUserInteractionEnabled:true];
 }
@@ -162,6 +163,8 @@
         cell.timeLabel.text = [NSString stringWithFormat:@"%d%@%02d%@", gameHour, @":", gameMinute, pm];
     }   else if (gameHour == 12)    {
         cell.timeLabel.text = [NSString stringWithFormat:@"%d%@%02d%@", gameHour, @":", gameMinute, pm];
+    }   else if (gameHour == 0) {
+        cell.timeLabel.text = [NSString stringWithFormat:@"%d%@%02d%@", gameHour, @":", gameMinute, am];
     }   else{
         cell.timeLabel.text = [NSString stringWithFormat:@"%d%@%d%@", gameHour, @":", gameMinute, am];
     }
@@ -173,24 +176,33 @@
     cell.dayLabel.text = [NSString stringWithFormat:@"%d%@%d%@%d", gameMonth, @"/", gameDay, @"/", gameYear];
     
     cell.team1Label.text = bet.team1;
-    cell.team1OddsLabel.text = [NSString stringWithFormat:@"%d", bet.team1Odds];
-    
-    PFFileObject *team1Image = bet.team1image;
-    NSURL *team1ImageURL = [NSURL URLWithString:team1Image.url];
-    [cell.team1ImageView setImageWithURL:team1ImageURL];
-    
-    PFFileObject *team2Image = bet.team2image;
-    NSURL *team2ImageURL = [NSURL URLWithString:team2Image.url];
-    [cell.team2ImageView setImageWithURL:team2ImageURL];
+    cell.team1OddsLabel.text = [self configureOdds:bet.team1Odds];
     
     cell.team2Label.text = bet.team2;
-    cell.team2OddsLabel.text = [NSString stringWithFormat:@"%d", bet.team2Odds];
-
+    cell.team2OddsLabel.text = [self configureOdds:bet.team2Odds];
     
-    if ([bet.betPick isEqualToString:bet.team1])    {
-        [cell.teamPickedImageView setImageWithURL:team1ImageURL];
+    if ([bet.sport isEqualToString:@"MLB"]) {
+        cell.team1ImageView.image = [UIImage imageNamed:bet.team1];
+        cell.team2ImageView.image = [UIImage imageNamed:bet.team2];
+        if ([bet.betPick isEqualToString:bet.team1])    {
+            cell.teamPickedImageView.image = cell.team1ImageView.image;
+        }   else    {
+            cell.teamPickedImageView.image = cell.team2ImageView.image;
+        }
     }   else    {
-        [cell.teamPickedImageView setImageWithURL:team2ImageURL];
+        PFFileObject *team1Image = bet.team1image;
+        NSURL *team1ImageURL = [NSURL URLWithString:team1Image.url];
+        [cell.team1ImageView setImageWithURL:team1ImageURL];
+        
+        PFFileObject *team2Image = bet.team2image;
+        NSURL *team2ImageURL = [NSURL URLWithString:team2Image.url];
+        [cell.team2ImageView setImageWithURL:team2ImageURL];
+        
+        if ([bet.betPick isEqualToString:bet.team1])  {
+            [cell.teamPickedImageView setImageWithURL:team1ImageURL];
+        }   else{
+            [cell.teamPickedImageView setImageWithURL:team2ImageURL];
+        }
     }
     
     return cell;
@@ -198,6 +210,18 @@
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.userBets.count;
+}
+
+- (NSString *) configureOdds: (nonnull int *) odd{
+    NSString *oddString = [NSString stringWithFormat:@"%d", odd];
+    if ((([oddString characterAtIndex:0] == 45) || ([oddString characterAtIndex:0] == 43))) {
+        return oddString;
+    }   else if ([oddString isEqualToString:@"100"])    {
+        return @"+100";
+    }
+    else{
+        return [@"+" stringByAppendingString:oddString];
+    }
 }
 
 //presents the image picker controller when the image is tapped
