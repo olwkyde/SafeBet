@@ -28,6 +28,7 @@
 @property (strong, nonatomic) NSMutableArray *leagueNames;
 @property (strong, nonatomic) NSMutableArray *userBets;
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
+@property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 
 
 @end
@@ -37,6 +38,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [self showIndicatorView];
     [self fetchUserBets];
     self.data = [NSMutableArray arrayWithCapacity:2];
     [self setUpViews];
@@ -61,6 +63,16 @@
     self.navigationController.navigationBar.barTintColor = [UIColor blackColor];
 }
 
+-(void)showIndicatorView    {
+    self.activityIndicator.hidesWhenStopped = true;
+    UIView *container = [[UIView alloc] initWithFrame:CGRectMake((self.view.frame.size.width / 2) - 50, (self.view.frame.size.width / 2) - 50, 100, 100)];
+    container.backgroundColor = [UIColor clearColor];
+    
+    [container addSubview:self.activityIndicator];
+    [self.view insertSubview:container atIndex:0];
+    [self.activityIndicator startAnimating];
+}
+
 //call to fetch UFC Events from the Sports odds API
 - (void) fetchUFCEvents  {
     APIManager *api = [APIManager shared];
@@ -75,6 +87,7 @@
             [self.tableView reloadData];
         }
     }];
+    [self.activityIndicator stopAnimating];
     [self.refreshControl endRefreshing];
 }
 
@@ -167,9 +180,12 @@
 //configures odds so that underdogs get the '+' symbol in front of the odds (an underdog can have +100 odds)
 - (NSString *) configureOdds: (nonnull int *) odd{
     NSString *oddString = [NSString stringWithFormat:@"%d", odd];
-    if ((([oddString characterAtIndex:0] == 45) || ([oddString characterAtIndex:0] == 43 && [oddString intValue] != 0)) || [oddString isEqualToString:@"100"]) {
+    if ((([oddString characterAtIndex:0] == 45) || ([oddString characterAtIndex:0] == 43 && [oddString intValue] != 0))) {
         return oddString;
-    }   else{
+    }   else if ([oddString isEqualToString:@"100"])    {
+        return @"+100";
+    }
+    else{
         return [@"+" stringByAppendingString:oddString];
     }
 }
@@ -210,6 +226,7 @@
         betCell.team1OddsLabel.text = [team1OddsString substringFromIndex:([team1OddsString length] - 4)];
         betCell.team2OddsLabel.text = [team2OddsString substringFromIndex:([team2OddsString length] - 4)];
 
+
         if ([bet.betPick isEqualToString:bet.team1])    {
             [betCell.teamPickedImageView setImageWithURL:team1ImageURL];
         }   else {
@@ -220,8 +237,10 @@
     }   else{
         eventCell.team1ImageView.image = event.team1Image.image;
         eventCell.team2ImageView.image = event.team2Image.image;
-        eventCell.team1OddsLabel.text = [self configureOdds:event.team1Odds];
-        eventCell.team2OddsLabel.text = [self configureOdds:event.team2Odds];
+        eventCell.team1OddsLabel.text = [NSString stringWithFormat:@"%+d", event.team1Odds];
+        eventCell.team2OddsLabel.text = [NSString stringWithFormat:@"%+d", event.team2Odds];
+//        eventCell.team1Oddslabel.text = [self configureOdds:event.team1Odds];
+//        eventCell.team2OddsLabel.text = [self configureOdds:event.team2Odds];
         eventCell.event = event;
         eventCell.dayLabel.text = event.date;
         eventCell.timeLabel.text = event.time;

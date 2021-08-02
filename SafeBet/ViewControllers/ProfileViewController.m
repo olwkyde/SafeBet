@@ -45,6 +45,11 @@
     [self fetchBets];
 }
 
+- (void)viewDidAppear:(BOOL)animated    {
+    [self setUpViews];
+    [self fetchBets];
+}
+
 
 -(void) setUpViews  {
     self.usernameLabel.text = [PFUser currentUser].username;
@@ -133,9 +138,12 @@
     if (bet.payout > 0.0)   {
         cell.payoutAmountLabel.text = [@"$" stringByAppendingString:[NSString stringWithFormat:@"%.2f", bet.payout]];
         cell.payoutAmountLabel.textColor = [UIColor greenColor];
-    }   else if (bet.payout == 0)   {
+    }
+    else if (bet.payout == 0)   {
         cell.payoutAmountLabel.text = [@"$" stringByAppendingString:[NSString stringWithFormat:@"%.2f", bet.payout]];
         cell.payoutAmountLabel.textColor = [UIColor redColor];
+    }   else    {
+        cell.payoutAmountLabel.text = @"";
     }
     
     cell.betAmountLabel.text = [@"$" stringByAppendingString:[NSString stringWithFormat:@"%.2f", bet.betAmount]];

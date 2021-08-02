@@ -120,8 +120,8 @@
     else{
         if (self.bet != nil)   {
             UIAlertController *warning = [UIAlertController alertControllerWithTitle:@"Warning"  message:@"" preferredStyle:(UIAlertControllerStyleAlert)];
-            NSString *betPickOdds = ([self team1Selected])? self.odds1Label.text: self.odds2Label.text;
-            [warning setMessage:[@"Would you like to edit pick of " stringByAppendingFormat:@"%@ %@ %@ %@ %.2f %@", self.bet.betPick, @" @ ", betPickOdds, @"for $", self.bet.betAmount, @"?"]];
+            NSString *pickOddsString = ([self.bet.betPick isEqualToString:self.bet.team1])? [self configureOdds:self.bet.team1Odds]: [self configureOdds:self.bet.team2Odds];
+            [warning setMessage:[@"Would you like to edit pick of " stringByAppendingFormat:@"%@ %@ %@ %@ %.2f %@", self.bet.betPick, @" @ ", pickOddsString, @"for $", self.bet.betAmount, @"?"]];
             UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 }];
             //add the cancel action to the alert
@@ -137,8 +137,19 @@
                 //update the bank label
                 self.bankAmountLabel.text = [@"Bank : $" stringByAppendingFormat:@"%.2f",([[PFUser.currentUser objectForKey:@"bank"] doubleValue])+ self.bet.betAmount - self.betAmountInt];
                 
+                self.bet.betAmount = self.betAmountInt;
+                self.bet.sport = self.event.sport;
+                self.bet.betPick = ([self team1Selected])? self.bet.team1: self.bet.team2;
+                self.bet.gameDate = self.event.gameDate;
+                self.bet.team1 = self.event.team1;
+                self.bet.team1Odds = self.event.team1Odds;
+                self.bet.team2 = self.event.team2;
+                self.bet.team2Odds = self.event.team2Odds;
+                
+                
+                [self.delegate madeBet:self.bet];
+                
                 [self playAnimation];
-                [self.navigationController popViewControllerAnimated:YES];
                 }];
             
             //add the ok action to the alert
