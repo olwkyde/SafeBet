@@ -84,7 +84,6 @@
             int betsMade = [[PFUser.currentUser objectForKey:@"betsMade"] intValue];
             double userBank = [[PFUser.currentUser objectForKey:@"bank"] doubleValue];
             user[@"betsMade"] = [NSNumber numberWithInt:(betsMade - 1)];
-            NSLog(@"%.2f", userBank + self.betAmount);
             [PFUser.currentUser setObject:[NSNumber numberWithDouble:(userBank + self.betAmount)] forKey:@"bank"];
             user[@"bank"] = [NSNumber numberWithDouble:(userBank + self.betAmount)];
             NSLog(@"%.2f", [user[@"bank"] doubleValue]);
