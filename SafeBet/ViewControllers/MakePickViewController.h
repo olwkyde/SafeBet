@@ -38,6 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) Bet *bet;
 @property (nonatomic, weak) id <MakePickControllerDelegate> delegate;
 
+
 @end
 
 NS_ASSUME_NONNULL_END

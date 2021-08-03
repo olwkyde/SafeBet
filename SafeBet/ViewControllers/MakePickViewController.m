@@ -137,17 +137,21 @@
                 //update the bank label
                 self.bankAmountLabel.text = [@"Bank : $" stringByAppendingFormat:@"%.2f",([[PFUser.currentUser objectForKey:@"bank"] doubleValue])+ self.bet.betAmount - self.betAmountInt];
                 
-                self.bet.betAmount = self.betAmountInt;
-                self.bet.sport = self.event.sport;
-                self.bet.betPick = ([self team1Selected])? self.bet.team1: self.bet.team2;
-                self.bet.gameDate = self.event.gameDate;
-                self.bet.team1 = self.event.team1;
-                self.bet.team1Odds = self.event.team1Odds;
-                self.bet.team2 = self.event.team2;
-                self.bet.team2Odds = self.event.team2Odds;
+                Bet *newBet = [[Bet alloc] init];
                 
+                newBet.betAmount = self.betAmountInt;
+                newBet.sport = self.event.sport;
+                newBet.betPick = ([self team1Selected])? self.bet.team1: self.bet.team2;
+                newBet.gameDate = self.event.gameDate;
+                newBet.team1 = self.event.team1;
+                newBet.team1Odds = self.event.team1Odds;
+                newBet.team2 = self.event.team2;
+                newBet.team2Odds = self.event.team2Odds;
                 
-                [self.delegate madeBet:self.bet];
+                newBet.team1image = [self getPFFileFromImage:self.event.team1Image.image];
+                newBet.team2image = [self getPFFileFromImage:self.event.team2Image.image];
+                
+                [self.delegate madeBet:newBet];
                 
                 [self playAnimation];
                 }];
@@ -294,5 +298,21 @@
                     self.payoutAmountLabel.text = [NSString stringWithFormat:@"%.2f", self.payoutInt];
             }
     }
+}
+//creates a PFFileObject out of a UIImage
+- (PFFileObject *)getPFFileFromImage: (UIImage * _Nullable)image {
+ 
+    // check if image is not nil
+    if (!image) {
+        return nil;
+    }
+    
+    NSData *imageData = UIImagePNGRepresentation(image);
+    // get image data and check if that is not nil
+    if (!imageData) {
+        return nil;
+    }
+    
+    return [PFFileObject fileObjectWithName:@"image.png" data:imageData];
 }
 @end

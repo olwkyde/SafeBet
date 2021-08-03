@@ -18,19 +18,19 @@ PODS:
   - DateTools (2.0.0)
   - HTMLKit (4.2.0)
   - lottie-ios (2.5.3)
-  - Ono (2.1.2)
   - Parse (1.19.2):
     - Parse/Core (= 1.19.2)
   - Parse/Core (1.19.2):
     - Bolts/Tasks (= 1.9.1)
+  - SCLAlertView-Objective-C (1.2.0)
 
 DEPENDENCIES:
   - AFNetworking
   - DateTools
   - HTMLKit (~> 4.2)
   - lottie-ios (~> 2.5.3)
-  - Ono
   - Parse
+  - SCLAlertView-Objective-C
 
 SPEC REPOS:
   trunk:
@@ -39,8 +39,8 @@ SPEC REPOS:
     - DateTools
     - HTMLKit
     - lottie-ios
-    - Ono
     - Parse
+    - SCLAlertView-Objective-C
 
 SPEC CHECKSUMS:
   AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
@@ -48,9 +48,9 @@ SPEC CHECKSUMS:
   DateTools: 933ac9c490f21f92127cf690ccd8c397e0126caf
   HTMLKit: e11ec9ed1a9be779e7dd65acdea5757fb113030e
   lottie-ios: a50d5c0160425cd4b01b852bb9578963e6d92d31
-  Ono: 26a7c1fc4df13ece7747560a1d80655807a8a000
   Parse: 081fb8755c3000fd11df817eec235def233d0af3
+  SCLAlertView-Objective-C: 84f12f66d779dadad7f293e5e8b7697ba4254ee0
 
-PODFILE CHECKSUM: 3772f9dc113362c36bafa6f083ad538636b9f570
+PODFILE CHECKSUM: ee11b74b2158b3661479f2ad0d3fdb7d334b1c25
 
 COCOAPODS: 1.10.1

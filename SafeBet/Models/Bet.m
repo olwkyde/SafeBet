@@ -84,7 +84,10 @@
             int betsMade = [[PFUser.currentUser objectForKey:@"betsMade"] intValue];
             double userBank = [[PFUser.currentUser objectForKey:@"bank"] doubleValue];
             user[@"betsMade"] = [NSNumber numberWithInt:(betsMade - 1)];
+            NSLog(@"%.2f", userBank + self.betAmount);
+            [PFUser.currentUser setObject:[NSNumber numberWithDouble:(userBank + self.betAmount)] forKey:@"bank"];
             user[@"bank"] = [NSNumber numberWithDouble:(userBank + self.betAmount)];
+            NSLog(@"%.2f", [user[@"bank"] doubleValue]);
 //            [PFUser.currentUser setValue: [NSNumber numberWithInt:(betsMade - 1)] forKey:@"betsMade"];
 //            NSLog(@"%d", betsMade);
             [userBet deleteInBackground];
@@ -105,6 +108,8 @@
     [parseManager fetchBet:self withCompletion:^(PFObject * _Nonnull userBet, NSError * _Nonnull error) {
         if (userBet)    {
             self.didWinBet = false;
+            userBet[@"payout"] = [NSNumber numberWithDouble:0.0];
+            [userBet saveInBackground];
             self.payout = 0.0;
         }
     }];

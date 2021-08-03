@@ -10,7 +10,7 @@ target 'SafeBet' do
   pod 'Parse'
   pod 'DateTools'
   pod 'lottie-ios', '~>2.5.3' 
-  pod 'Ono'
+  pod 'SCLAlertView-Objective-C'
   pod 'HTMLKit', '~> 4.2'
 
   target 'SafeBetTests' do

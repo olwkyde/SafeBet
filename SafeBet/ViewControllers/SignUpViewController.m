@@ -143,7 +143,7 @@
 
 //checks if passwords do not match
 -(BOOL) passwordsDoNotMatch {
-    if (self.passwordTextField.text != self.confirmPasswordTextField.text)   {
+    if (![self.passwordTextField.text isEqualToString:self.confirmPasswordTextField.text])    {
         return true;
     }
     return false;

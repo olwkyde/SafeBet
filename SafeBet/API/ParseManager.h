@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)shared;
 -(void)fetchUserBetsWithCompletion:(void (^)(NSArray *betsPlaced, NSError *error))completion;
 -(void) fetchBet:(Bet * _Nonnull)bet withCompletion:(void (^)(PFObject *userBet, NSError *error))completion;
-
+-(void)fetchOutstandingBetsWithCompletion:(void (^)(NSArray *betsPlaced, NSError *error))completion;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -62,6 +62,28 @@
         }}];
 }
 
+//fetches all the bets the user has made that don't have a payout yet
+-(void)fetchOutstandingBetsWithCompletion:(void (^)(NSArray *betsPlaced, NSError *error))completion   {
+    // construct query
+    PFQuery *query = [PFQuery queryWithClassName:@"Bet"];
+    [query includeKey:@"author"];
+    [query includeKeys:[NSArray arrayWithObjects:@"author", @"gameDate", @"team2Image", @"team1Image", @"betPick", @"team1", @"team2", @"team1Odds", nil]];
+    [query includeKey:@"createdAt"];
+    [query whereKey:@"author" equalTo:[PFUser currentUser]];
+    [query whereKey:@"payout" equalTo:[NSNumber numberWithDouble:-1.0]];
+    [query orderByDescending:@"createdAt"];
+
+    // fetch data asynchronously
+    [query findObjectsInBackgroundWithBlock:^(NSArray *bets, NSError *error) {
+        if (bets != nil) {
+            completion(bets, nil);
+        } else {
+            NSLog(@"%@", error.localizedDescription);
+            completion(nil, error);
+        }
+    }];
+}
+
 
 
 
