@@ -248,7 +248,6 @@
         eventCell.timeLabel.text = event.time;
         eventCell.team1Label.text = event.team1;
         eventCell.team2Label.text = event.team2;
-       
         return eventCell;
     }
 

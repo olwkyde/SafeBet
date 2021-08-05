@@ -58,10 +58,11 @@
         if (gameHour > 12) {
             gameHour = gameHour - 12;
             self.time = [NSString stringWithFormat:@"%d%@%02d%@", gameHour, @":", gameMinute, pm];
+        }   else if (gameHour == 12)    {
+            self.time = [NSString stringWithFormat:@"%d%@%02d%@", gameHour, @":", gameMinute, pm];
         }   else if (gameHour == 0)    {
             self.time = [NSString stringWithFormat:@"%d%@%02d%@", 12, @":", gameMinute, am];
-        }
-            else{
+        }   else{
             self.time = [NSString stringWithFormat:@"%d%@%d%@", gameHour, @":", gameMinute, am];
         }
         

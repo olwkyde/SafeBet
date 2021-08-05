@@ -42,6 +42,7 @@
 
     newBet.betAmount = betAmount;
     newBet.sport = event.sport;
+    NSLog(@"%@", newBet.sport);
     newBet.betPick = betPick;
     newBet.gameDate = event.gameDate;
     newBet.team1 = event.team1;

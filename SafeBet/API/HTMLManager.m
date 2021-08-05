@@ -157,10 +157,12 @@ static NSString * const baseMLBURLString = @"https://www.baseball-reference.com/
 }
 
 -(NSString *) findMLBWinnerWithArrayLinks:(NSArray * _Nonnull)arr andDate:(NSDate * _Nonnull)gameDate  {
-    if (![[self findMLBWinnerWithLink:arr[1] andDate:gameDate] isEqualToString:@""]) {
-        return [self findMLBWinnerWithLink:arr[1] andDate:gameDate];
-    }   else if (![[self findMLBWinnerWithLink:arr[2] andDate:gameDate] isEqualToString:@""])   {
-        return [self findMLBWinnerWithLink:arr[2] andDate:gameDate];
+    NSString *result = [self findMLBWinnerWithLink:arr[1] andDate:gameDate];
+    NSString *result2 = [self findMLBWinnerWithLink:arr[2] andDate:gameDate];
+    if (![result isEqualToString:@""]) {
+        return result;
+    }   else if (![result2 isEqualToString:@""])   {
+        return result2;
     }
     return @"";
 }

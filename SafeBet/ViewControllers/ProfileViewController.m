@@ -38,13 +38,7 @@
     [self fetchBets];
     UITapGestureRecognizer *profileImageTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(profileImageTapped)];
     [self.profileImageView addGestureRecognizer:profileImageTapGesture];
-//    [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(onTimer) userInfo:nil repeats:true];
     [self.profileImageView setUserInteractionEnabled:true];
-}
-
-- (void)onTimer {
-    [self setUpViews];
-    [self fetchBets];
 }
 
 - (void)viewDidAppear:(BOOL)animated    {
@@ -115,7 +109,7 @@
     int numberOfHours = secondsBetween / 3600;
         
     //check for MLB results that haven't been checked yet
-    if (numberOfHours >= 36  && bet.payout == -1.0 && [bet.sport isEqualToString:@"MLB"])    {
+    if (numberOfHours >= 24  && bet.payout == -1.0 && [bet.sport isEqualToString:@"MLB"])    {
         HTMLManager *htmlManager = [HTMLManager shared];
         bool didWinBet = [htmlManager didWinMLBBet:bet];
         if (didWinBet)  {
@@ -123,6 +117,7 @@
         }   else{
             [bet lostBet];
         }
+        [self setUpViews];
     }
     
     //check for UFC fight results that haven't been checked yet
@@ -134,6 +129,7 @@
         }   else{
             [bet lostBet];
         }
+        [self setUpViews];
     }
     
     //display the payout based on whether the user won the bet
@@ -165,7 +161,7 @@
     }   else if (gameHour == 12)    {
         cell.timeLabel.text = [NSString stringWithFormat:@"%d%@%02d%@", gameHour, @":", gameMinute, pm];
     }   else if (gameHour == 0) {
-        cell.timeLabel.text = [NSString stringWithFormat:@"%d%@%02d%@", gameHour, @":", gameMinute, am];
+        cell.timeLabel.text = [NSString stringWithFormat:@"%d%@%02d%@", 12, @":", gameMinute, am];
     }   else{
         cell.timeLabel.text = [NSString stringWithFormat:@"%d%@%d%@", gameHour, @":", gameMinute, am];
     }
@@ -194,6 +190,7 @@
         PFFileObject *team1Image = bet.team1image;
         NSURL *team1ImageURL = [NSURL URLWithString:team1Image.url];
         [cell.team1ImageView setImageWithURL:team1ImageURL];
+
         
         PFFileObject *team2Image = bet.team2image;
         NSURL *team2ImageURL = [NSURL URLWithString:team2Image.url];
@@ -288,28 +285,30 @@
     Bet *bet = [[Bet alloc] init];
     bet = self.userBets[indexPath.row];
     
-    if ([now compare:bet.gameDate] == NSOrderedAscending)  {
-        NSString * storyboardName = @"Main";
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];
-        
-        MakePickViewController * makePickViewController = [storyboard instantiateViewControllerWithIdentifier:@"MakePickViewController"];
-        
-        //configure event out of bet
-        Events *event = [self eventOfBet:bet];
-        //set the bet and event to the MakePick Conreoller's bet and event
-        makePickViewController.bet = bet;
-        makePickViewController.event = event;
-        
-        [self presentViewController:makePickViewController animated:YES completion:nil];
-    }   else    {
-        self.alert = [UIAlertController alertControllerWithTitle:@"Error"  message:@"This event already underway or has already ended." preferredStyle:(UIAlertControllerStyleAlert)];
-        // create a CANCEL action
-        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        }];
-        //add an ok action to the alert andn present it 
-        [self.alert addAction:okAction];
-        [self presentViewController:self.alert animated:YES completion:^{
-        }];
+    if (bet.payout == -1.0) {
+        if ([now compare:bet.gameDate] == NSOrderedAscending)  {
+            NSString * storyboardName = @"Main";
+            UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];
+            
+            MakePickViewController * makePickViewController = [storyboard instantiateViewControllerWithIdentifier:@"MakePickViewController"];
+            
+            //configure event out of bet
+            Events *event = [self eventOfBet:bet];
+            //set the bet and event to the MakePick Conreoller's bet and event
+            makePickViewController.bet = bet;
+            makePickViewController.event = event;
+            
+            [self presentViewController:makePickViewController animated:YES completion:nil];
+        }   else    {
+            self.alert = [UIAlertController alertControllerWithTitle:@"Error"  message:@"This event already underway or has already ended." preferredStyle:(UIAlertControllerStyleAlert)];
+            // create a CANCEL action
+            UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            }];
+            //add an ok action to the alert andn present it
+            [self.alert addAction:okAction];
+            [self presentViewController:self.alert animated:YES completion:^{
+            }];
+        }
     }
 }
 
@@ -319,6 +318,7 @@
     event.team2 = bet.team2;
     event.team1Odds = bet.team1Odds;
     event.team2Odds = bet.team2Odds;
+    event.sport = bet.sport;
     
     //fetch picture data and set it to the event image
     if ([bet.sport isEqualToString:@"MLB"]) {
@@ -344,6 +344,7 @@
 - (void)madeBet:(Bet * _Nonnull)bet {
     [self setUpViews];
     [self fetchBets];
+    [self.tableView reloadData];
 }
 
 - (IBAction)moneyRequestPressed:(id)sender {
@@ -356,6 +357,7 @@
         double bank = [[PFUser.currentUser objectForKey:@"bank"] doubleValue];
         __block int outstandingBetCount;
         NSDate *lastBanked = [PFUser.currentUser objectForKey:@"lastBanked"];
+        __block NSArray *oustandingBets;
         __block bool doesBigBetExist;
         
         NSTimeInterval secondsBetween = [lastBanked timeIntervalSinceDate:now];
@@ -364,44 +366,41 @@
         ParseManager *parseManager = [ParseManager shared];
         [parseManager fetchOutstandingBetsWithCompletion:^(NSArray * _Nonnull betsPlaced, NSError * _Nonnull error) {
             if (betsPlaced) {
+                oustandingBets = betsPlaced;
                 outstandingBetCount = (int) betsPlaced.count;
-                for (Bet *bet in betsPlaced)    {
-                    if (bet.betAmount >= (2 * bank) && bank <= 10)  {
-                        doesBigBetExist = true;
-                    }
-                } doesBigBetExist = false;
+                doesBigBetExist = [self doesBigBetExistWithArray:oustandingBets];
+                
+                //present an error alertview if either the bank is greater than 25, the outstanding bet count is greater than 3, or it has been less than a week since the last time the user placed a bet
+                SCLAlertView *alert = [[SCLAlertView alloc] init];
+                if (bank >= 25.0 || outstandingBetCount >= 3)   {
+                    //make an alert
+                    [alert showWarning:self title:@"Error" subTitle:@"You cannot add funds if your bank has over $25 or you have more than 3 outstanding bets." closeButtonTitle:@"Done" duration:0.0f];
+                }
+                   else if (doesBigBetExist)   {
+                    [alert showWarning:self title:@"Error" subTitle:@"One of your outstanding bets are too big. Lower the price of your bet." closeButtonTitle:@"Done" duration:0.0f];
+                }
+                    else if ((secondsBetween <= 604800 & secondsBetween != 0))  {
+                    //get the amount of days and hours until the next possible pump of cash
+                    int daysRemaining = (604800 - secondsBetween) / 86400;
+                    int hoursRemaining = ((604800 - secondsBetween) - (86400 * daysRemaining)) / 3600;
+                        
+                    NSString *subtitle = [NSString stringWithFormat:@"You cannot add funds if you've had a pump within the last week. You have %d days and %d hours before the next earliest pump.", daysRemaining, hoursRemaining];
+                    [alert showWarning:self title:@"Error" subTitle:subtitle closeButtonTitle:@"Done" duration:0.0f];
+                }
+                    else    {
+                    PFUser *user = [PFUser currentUser];
+                    double userBank = [user[@"bank"] doubleValue];
+                    user[@"bank"] = [NSNumber numberWithDouble:(userBank + 100.)];
+                    user[@"lastBanked"] = [NSDate now];
+                    [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+                        if (error != nil)  {
+                            NSLog(@"%@", [error localizedDescription]);
+                            [self setUpViews];
+                        }
+                    }];
+                }
             }
         }];
-        
-        //present an error alertview if either the bank is greater than 25, the outstanding bet count is greater than 3, or it has been less than a week since the last time the user placed a bet
-        SCLAlertView *alert = [[SCLAlertView alloc] init];
-        if (bank >= 25.0 || outstandingBetCount >= 3)   {
-            //make an alert
-            [alert showWarning:self title:@"Error" subTitle:@"You cannot add funds if your bank has over $25 or you have more than 3 outstanding bets." closeButtonTitle:@"Done" duration:0.0f];
-        }
-//           else if (doesBigBetExist)   {
-//            [alert showWarning:self title:@"Error" subTitle:@"One of your outstanding bets are too big. Lower the price of your bet." closeButtonTitle:@"Done" duration:0.0f];
-//        }
-            else if ((secondsBetween <= 604800 & secondsBetween != 0))  {
-            //get the amount of days and hours until the next possible pump of cash
-            int daysRemaining = (604800 - secondsBetween) / 86400;
-            int hoursRemaining = ((604800 - secondsBetween) - (86400 * daysRemaining)) / 3600;
-                
-            NSString *subtitle = [NSString stringWithFormat:@"You cannot add funds if you've had a pump within the last week. You have %d days and %d hours before the next earliest pump.", daysRemaining, hoursRemaining];
-            [alert showWarning:self title:@"Error" subTitle:subtitle closeButtonTitle:@"Done" duration:0.0f];
-        }
-            else    {
-            PFUser *user = [PFUser currentUser];
-            double userBank = [user[@"bank"] doubleValue];
-            user[@"bank"] = [NSNumber numberWithDouble:(userBank + 100.)];
-            user[@"lastBanked"] = [NSDate now];
-            [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
-                if (error != nil)  {
-                    NSLog(@"%@", [error localizedDescription]);
-                    [self setUpViews];
-                }
-            }];
-        }
     });
     SCLAlertViewShowBuilder *showBuilder = [SCLAlertViewShowBuilder new]
     .style(SCLAlertViewStyleInfo)
@@ -412,6 +411,17 @@
     // or even
     showBuilder.show(builder.alertView, self);
     [self setUpViews];
+}
+
+//checks if there is a big bet that the user has made. a big bet is defined as a bet that is more than half the bank. this is to prevent useres from making big bets, adding a pump of money, then easing up on the bet amount to garner even more money 
+-(bool) doesBigBetExistWithArray:(NSArray * _Nonnull)betsPlaced {
+    double bank = [[PFUser.currentUser objectForKey:@"bank"] doubleValue];
+    for (Bet *bet in betsPlaced)    {
+        NSLog(@"%.2f", bet.betAmount);
+        if (bet.betAmount >= bank)  {
+            return true;
+        }
+    } return false;
 }
 
 @end
